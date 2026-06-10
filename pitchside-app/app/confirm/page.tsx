@@ -1,0 +1,94 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { usePredictionStore } from '@/lib/store';
+import { getFlag } from '@/lib/data';
+
+export default function ConfirmPage() {
+  const router = useRouter();
+  const { user, finalPick, entryTime, submitted } = usePredictionStore();
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!submitted || !user) {
+      router.replace('/');
+    }
+  }, [submitted, user, router]);
+
+  if (!submitted || !user) return null;
+
+  const t = entryTime ? new Date(entryTime) : new Date();
+  const fmt =
+    t.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) +
+    ' · ' +
+    t.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+  const shareText = `I just predicted my full World Cup 2026 path on PitchSide Predictor! My champion: ${finalPick} ${getFlag(finalPick || '')} 🏆\n\nEnter now for a chance to win an iPhone 17 Pro 👉 @thepitchsidetv\n#WC2026 #PitchSideTV`;
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      await navigator.share({ text: shareText });
+    } else {
+      await navigator.clipboard.writeText(shareText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }
+  };
+
+  return (
+    <div className="confirm-wrap">
+      <div className="confirm-icon">🎉</div>
+      <h1 className="confirm-title">YOU&apos;RE IN!</h1>
+      <p className="confirm-sub">
+        Your prediction path is locked in. The clock is ticking — the earliest
+        correct path wins the iPhone 17 Pro when PitchSide TV hits 100K.
+      </p>
+
+      <div className="entry-card" id="entry-summary">
+        <div className="entry-row">
+          <span className="entry-key">Predictor</span>
+          <span className="entry-val">{user.nick}</span>
+        </div>
+        <div className="entry-row">
+          <span className="entry-key">Instagram</span>
+          <span className="entry-val">{user.insta}</span>
+        </div>
+        <div className="entry-row">
+          <span className="entry-key">Champion Pick</span>
+          <span className="entry-val gold">
+            {finalPick} {getFlag(finalPick || '')}
+          </span>
+        </div>
+        <div className="entry-row">
+          <span className="entry-key">Entry Locked</span>
+          <span className="entry-val">{fmt}</span>
+        </div>
+        <div className="entry-row">
+          <span className="entry-key">Status</span>
+          <span className="entry-val green">✓ Confirmed</span>
+        </div>
+      </div>
+
+      <div className="share-btns">
+        <button className="share-btn primary" onClick={handleShare} id="share-btn">
+          {copied ? '✓ Copied!' : '📤 Share Your Pick'}
+        </button>
+        <Link href="/" className="share-btn">
+          Back to Home
+        </Link>
+      </div>
+
+      <div className="rules-box" style={{ marginTop: 28 }}>
+        <h3>WHAT HAPPENS NEXT</h3>
+        <ul>
+          <li>Follow @thepitchsidetv on Instagram to stay eligible</li>
+          <li>Watch every match prediction reel on PitchSide TV</li>
+          <li>Your path is locked — no edits after submission</li>
+          <li>Winner announced when PitchSide TV hits 100K followers</li>
+        </ul>
+      </div>
+    </div>
+  );
+}

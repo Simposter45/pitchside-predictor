@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PitchSide Predictor — Win an iPhone 17 Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0a0e1a;
+  --navy2:#0f1628;
+  --blue:#378ADD;
+  --blue-light:#5fa3e8;
+  --white:#ffffff;
+  --gray:#8892a4;
+  --gray-light:#1a2235;
+  --gray-border:#1e2d45;
+  --green:#22c55e;
+  --gold:#f59e0b;
+  --red:#ef4444;
+}
+body{background:var(--navy);color:var(--white);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,14,26,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--gray-border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--white);letter-spacing:1px}
+.nav-logo span{color:var(--blue)}
+.nav-prize{background:var(--gold);color:#000;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:0.5px}
+
+/* PAGES */
+.page{display:none;min-height:100vh;padding-top:56px}
+.page.active{display:block}
+
+/* HERO */
+.hero{padding:60px 24px 40px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(55,138,221,0.12) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{font-size:11px;font-weight:600;color:var(--blue);letter-spacing:3px;text-transform:uppercase;margin-bottom:16px}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,12vw,96px);line-height:0.92;color:var(--white);margin-bottom:8px}
+.hero-title span{color:var(--blue)}
+.hero-sub{font-size:16px;color:var(--gray);max-width:420px;margin:0 auto 32px;line-height:1.6}
+.prize-badge{display:inline-flex;align-items:center;gap:10px;background:var(--gray-light);border:1px solid var(--gray-border);border-radius:12px;padding:12px 20px;margin-bottom:40px}
+.prize-badge .trophy{font-size:28px}
+.prize-badge-text{text-align:left}
+.prize-badge-text .label{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:1px}
+.prize-badge-text .value{font-size:18px;font-weight:700;color:var(--gold)}
+.hero-cta{display:inline-block;background:var(--blue);color:var(--white);font-size:15px;font-weight:600;padding:14px 36px;border-radius:8px;cursor:pointer;border:none;transition:background 0.2s}
+.hero-cta:hover{background:var(--blue-light)}
+.hero-steps{display:flex;justify-content:center;gap:0;margin:48px auto 0;max-width:560px;padding:0 8px}
+.step{flex:1;text-align:center;position:relative}
+.step:not(:last-child)::after{content:'';position:absolute;top:16px;left:60%;width:80%;height:1px;background:var(--gray-border)}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--gray-light);border:1px solid var(--blue);color:var(--blue);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.step-label{font-size:11px;color:var(--gray);line-height:1.4}
+
+/* REGISTER FORM */
+.register-wrap{max-width:440px;margin:0 auto;padding:40px 24px}
+.register-title{font-family:'Bebas Neue',sans-serif;font-size:36px;margin-bottom:4px}
+.register-sub{font-size:14px;color:var(--gray);margin-bottom:32px}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.form-input{width:100%;background:var(--gray-light);border:1px solid var(--gray-border);color:var(--white);font-size:15px;padding:12px 16px;border-radius:8px;outline:none;transition:border-color 0.2s;font-family:'Inter',sans-serif}
+.form-input:focus{border-color:var(--blue)}
+.form-input::placeholder{color:#3a4a5e}
+.nickname-preview{margin-top:6px;font-size:12px;color:var(--blue);min-height:18px}
+.form-hint{margin-top:6px;font-size:11px;color:var(--gray)}
+.submit-btn{width:100%;background:var(--blue);color:var(--white);font-size:15px;font-weight:700;padding:14px;border-radius:8px;border:none;cursor:pointer;margin-top:8px;transition:background 0.2s;font-family:'Inter',sans-serif}
+.submit-btn:hover{background:var(--blue-light)}
+.terms{font-size:11px;color:var(--gray);text-align:center;margin-top:16px;line-height:1.6}
+.terms a{color:var(--blue);text-decoration:none}
+
+/* BRACKET PAGES */
+.bracket-header{padding:32px 24px 16px;border-bottom:1px solid var(--gray-border);max-width:900px;margin:0 auto}
+.bracket-header h1{font-family:'Bebas Neue',sans-serif;font-size:32px;margin-bottom:4px}
+.bracket-header p{font-size:14px;color:var(--gray)}
+.progress-bar-wrap{display:flex;gap:6px;margin-top:16px}
+.prog-step{flex:1;height:3px;border-radius:2px;background:var(--gray-border)}
+.prog-step.done{background:var(--blue)}
+.prog-step.active{background:var(--blue);opacity:0.6}
+
+/* GROUP STAGE */
+.groups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;padding:24px;max-width:900px;margin:0 auto}
+.group-card{background:var(--gray-light);border:1px solid var(--gray-border);border-radius:12px;overflow:hidden}
+.group-card-header{background:var(--navy2);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+.group-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--blue)}
+.group-instruction{font-size:10px;color:var(--gray)}
+.team-row{padding:8px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background 0.15s;border-bottom:1px solid rgba(255,255,255,0.04)}
+.team-row:last-child{border-bottom:none}
+.team-row:hover{background:rgba(55,138,221,0.08)}
+.team-flag{font-size:20px;line-height:1}
+.team-name{font-size:13px;font-weight:500;flex:1}
+.team-rank{font-size:11px;color:var(--gray)}
+.team-pick{width:20px;height:20px;border-radius:50%;border:2px solid var(--gray-border);display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.team-pick.selected{background:var(--blue);border-color:var(--blue)}
+.team-pick.selected::after{content:'✓';font-size:11px;font-weight:700}
+.team-pick.winner{background:var(--gold);border-color:var(--gold)}
+.team-pick.winner::after{content:'★';font-size:11px}
+.pick-label{font-size:9px;color:var(--gray);text-align:center;padding:6px 14px;background:var(--navy2)}
+.pick-count{font-size:11px;color:var(--blue);font-weight:600}
+
+/* KNOCKOUT */
+.knockout-wrap{padding:24px;max-width:900px;margin:0 auto;overflow-x:auto}
+.knockout-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.round-label{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--blue);letter-spacing:1px}
+.matchup-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:28px}
+.matchup-card{background:var(--gray-light);border:1px solid var(--gray-border);border-radius:10px;overflow:hidden}
+.matchup-top{background:var(--navy2);padding:6px 12px;font-size:10px;color:var(--gray);letter-spacing:0.5px}
+.matchup-team{padding:8px 12px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:background 0.15s;border-bottom:1px solid rgba(255,255,255,0.04)}
+.matchup-team:last-child{border-bottom:none}
+.matchup-team:hover{background:rgba(55,138,221,0.08)}
+.matchup-team.picked{background:rgba(55,138,221,0.15);border-left:2px solid var(--blue)}
+.matchup-team.tbd{opacity:0.4;cursor:default}
+.matchup-team .flag{font-size:18px}
+.matchup-team .name{font-size:13px;font-weight:500;flex:1}
+.matchup-team .checkmark{font-size:11px;color:var(--blue);font-weight:700;opacity:0}
+.matchup-team.picked .checkmark{opacity:1}
+
+/* FINAL */
+.final-wrap{padding:40px 24px;max-width:600px;margin:0 auto;text-align:center}
+.final-trophy{font-size:64px;margin-bottom:16px}
+.final-title{font-family:'Bebas Neue',sans-serif;font-size:48px;margin-bottom:8px}
+.final-matchup{display:flex;align-items:center;justify-content:center;gap:16px;margin:32px 0;flex-wrap:wrap}
+.finalist-card{background:var(--gray-light);border:1px solid var(--gray-border);border-radius:12px;padding:20px 28px;text-align:center;cursor:pointer;transition:all 0.2s;min-width:140px}
+.finalist-card:hover{border-color:var(--blue)}
+.finalist-card.winner-pick{border-color:var(--gold);background:rgba(245,158,11,0.08)}
+.finalist-flag{font-size:40px;margin-bottom:8px}
+.finalist-name{font-size:14px;font-weight:600}
+.vs-label{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gray)}
+
+/* CONFIRMATION */
+.confirm-wrap{padding:60px 24px;max-width:480px;margin:0 auto;text-align:center}
+.confirm-icon{font-size:56px;margin-bottom:20px}
+.confirm-title{font-family:'Bebas Neue',sans-serif;font-size:42px;margin-bottom:8px}
+.confirm-sub{font-size:14px;color:var(--gray);margin-bottom:32px;line-height:1.7}
+.entry-card{background:var(--gray-light);border:1px solid var(--gray-border);border-radius:12px;padding:20px;margin:0 auto 32px;text-align:left;max-width:340px}
+.entry-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.entry-row:last-child{border-bottom:none}
+.entry-key{font-size:12px;color:var(--gray)}
+.entry-val{font-size:13px;font-weight:600;color:var(--white)}
+.entry-val.gold{color:var(--gold)}
+.share-btn{background:transparent;border:1px solid var(--blue);color:var(--blue);font-size:14px;font-weight:600;padding:12px 28px;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;margin:0 6px;transition:background 0.2s}
+.share-btn:hover{background:rgba(55,138,221,0.1)}
+.share-btn.primary{background:var(--blue);color:var(--white)}
+.share-btn.primary:hover{background:var(--blue-light)}
+.rules-box{background:var(--gray-light);border:1px solid var(--gray-border);border-radius:10px;padding:16px 20px;text-align:left;margin-top:24px;max-width:380px;margin-left:auto;margin-right:auto}
+.rules-box h3{font-size:13px;font-weight:700;margin-bottom:10px;color:var(--blue)}
+.rules-box li{font-size:12px;color:var(--gray);line-height:1.8;margin-left:16px}
+
+/* NAV BOTTOM */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--navy2);border-top:1px solid var(--gray-border);padding:0 24px;display:none;align-items:center;justify-content:space-between;height:60px;z-index:100}
+.bottom-nav.visible{display:flex}
+.nav-btn{background:transparent;border:none;color:var(--gray);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;padding:8px 12px;border-radius:6px;transition:color 0.2s}
+.nav-btn:hover{color:var(--white)}
+.nav-btn.primary-btn{background:var(--blue);color:var(--white);padding:10px 24px;border-radius:8px}
+.nav-btn.primary-btn:hover{background:var(--blue-light)}
+.nav-count{font-size:11px;color:var(--gray);text-align:center}
+
+/* UTILS */
+.hidden{display:none!important}
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:0.5px}
+.badge-blue{background:rgba(55,138,221,0.15);color:var(--blue)}
+.badge-gold{background:rgba(245,158,11,0.15);color:var(--gold)}
+.pitch-watermark{position:fixed;bottom:70px;right:16px;font-size:10px;color:#1e2d45;letter-spacing:1px;font-weight:700;writing-mode:vertical-rl}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">PITCHSIDE<span>.</span>PREDICTOR</div>
+  <div class="nav-prize">🏆 iPhone 17 Pro Prize</div>
+</nav>
+
+<!-- PAGE 1: LANDING -->
+<div class="page active" id="page-landing">
+  <div class="hero">
+    <div class="hero-eyebrow">FIFA World Cup 2026 · Official Predictor</div>
+    <h1 class="hero-title">PREDICT<br>THE <span>PATH</span></h1>
+    <p class="hero-sub">Pick every winner from group stage to the final. The fastest correct prediction wins.</p>
+    <div class="prize-badge">
+      <div class="trophy">🏆</div>
+      <div class="prize-badge-text">
+        <div class="label">Grand Prize</div>
+        <div class="value">iPhone 17 Pro</div>
+      </div>
+    </div>
+    <br>
+    <button class="hero-cta" onclick="goTo('page-register')">Enter Now — It's Free</button>
+
+    <div class="hero-steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-label">Register<br>free</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-label">Pick every<br>winner</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-label">Earliest<br>correct path</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-label">Win<br>iPhone 17 Pro</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:560px;margin:0 auto;padding:0 24px 24px">
+    <div class="rules-box">
+      <h3>HOW TO WIN</h3>
+      <ul>
+        <li>Pick the winner of every match — group stage through the final</li>
+        <li>Submit your full path before matches begin</li>
+        <li>The earliest entry with a 100% correct path wins</li>
+        <li>Prize awarded when PitchSide TV reaches 100K followers</li>
+        <li>One entry per person. Follow @thepitchsidetv to be eligible.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: REGISTER -->
+<div class="page" id="page-register">
+  <div class="register-wrap">
+    <h2 class="register-title">Create Your Entry</h2>
+    <p class="register-sub">You'll need this to claim your prize if you win.</p>
+
+    <div class="form-group">
+      <label class="form-label">Your Name</label>
+      <input class="form-input" type="text" id="reg-name" placeholder="e.g. Swapna Roy" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Predictor Nickname <span style="color:var(--blue)">★</span></label>
+      <input class="form-input" type="text" id="reg-nick" placeholder="e.g. GoatHunter99" autocomplete="off" oninput="updateNickPreview()">
+      <div class="nickname-preview" id="nick-preview"></div>
+      <div class="form-hint">This is your public identity on the leaderboard. Make it legendary.</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Instagram Handle</label>
+      <input class="form-input" type="text" id="reg-insta" placeholder="@yourhandle" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-input" type="email" id="reg-email" placeholder="you@email.com" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Phone</label>
+      <input class="form-input" type="tel" id="reg-phone" placeholder="+91 ..." autocomplete="off">
+    </div>
+
+    <button class="submit-btn" onclick="submitRegister()">Continue to Group Stage →</button>
+    <p class="terms">By entering you agree to the <a href="#">contest rules</a>. One entry per person. Must follow @thepitchsidetv.</p>
+  </div>
+</div>
+
+<!-- PAGE 3: GROUP STAGE -->
+<div class="page" id="page-groups">
+  <div class="bracket-header">
+    <h1>Group Stage Picks</h1>
+    <p>Select 2 teams to advance from each group. Top pick = group winner.</p>
+    <div class="progress-bar-wrap">
+      <div class="prog-step done"></div>
+      <div class="prog-step active"></div>
+      <div class="prog-step"></div>
+      <div class="prog-step"></div>
+    </div>
+  </div>
+  <div class="groups-grid" id="groups-grid"></div>
+  <div style="height:70px"></div>
+</div>
+
+<!-- PAGE 4: ROUND OF 32 + 16 -->
+<div class="page" id="page-knockouts">
+  <div class="bracket-header">
+    <h1>Knockout Rounds</h1>
+    <p>Pick the winner of each match through to the semi-finals.</p>
+    <div class="progress-bar-wrap">
+      <div class="prog-step done"></div>
+      <div class="prog-step done"></div>
+      <div class="prog-step active"></div>
+      <div class="prog-step"></div>
+    </div>
+  </div>
+  <div class="knockout-wrap" id="knockout-wrap"></div>
+  <div style="height:70px"></div>
+</div>
+
+<!-- PAGE 5: FINAL -->
+<div class="page" id="page-final">
+  <div class="bracket-header">
+    <h1>The Final</h1>
+    <p>Who lifts the trophy at MetLife Stadium on July 19?</p>
+    <div class="progress-bar-wrap">
+      <div class="prog-step done"></div>
+      <div class="prog-step done"></div>
+      <div class="prog-step done"></div>
+      <div class="prog-step active"></div>
+    </div>
+  </div>
+  <div class="final-wrap">
+    <div class="final-trophy">🏆</div>
+    <h2 class="final-title">PICK YOUR<br>CHAMPION</h2>
+    <div class="final-matchup" id="final-matchup">
+      <div style="color:var(--gray);font-size:14px">Complete semi-final picks to unlock the final</div>
+    </div>
+  </div>
+  <div style="height:70px"></div>
+</div>
+
+<!-- PAGE 6: CONFIRMATION -->
+<div class="page" id="page-confirm">
+  <div class="confirm-wrap">
+    <div class="confirm-icon">🎉</div>
+    <h2 class="confirm-title">YOU'RE IN!</h2>
+    <p class="confirm-sub">Your prediction path is locked in. The clock is ticking — the earliest correct path wins the iPhone 17 Pro when PitchSide TV hits 100K.</p>
+
+    <div class="entry-card" id="entry-summary"></div>
+
+    <div>
+      <button class="share-btn primary" onclick="shareEntry()">Share Your Pick</button>
+      <button class="share-btn" onclick="goTo('page-landing')">Back to Home</button>
+    </div>
+
+    <div class="rules-box" style="margin-top:28px">
+      <h3>WHAT HAPPENS NEXT</h3>
+      <ul>
+        <li>Follow @thepitchsidetv on Instagram to stay eligible</li>
+        <li>Watch every match prediction reel on PitchSide TV</li>
+        <li>Your path is locked — no edits after submission</li>
+        <li>Winner announced when PitchSide TV hits 100K followers</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav" id="bottom-nav">
+  <button class="nav-btn" id="nav-back-btn" onclick="goBack()">← Back</button>
+  <div class="nav-count" id="nav-count"></div>
+  <button class="nav-btn primary-btn" id="nav-next-btn" onclick="goNext()">Next →</button>
+</div>
+
+<div class="pitch-watermark">PITCHSIDE TV</div>
+
+<script>
+const WC_GROUPS = [
+  {name:'A',teams:[{f:'🇲🇽',n:'Mexico',r:15},{f:'🇿🇦',n:'South Africa',r:60},{f:'🇰🇷',n:'South Korea',r:23},{f:'🏴',n:'Playoff W',r:null}]},
+  {name:'B',teams:[{f:'🇨🇦',n:'Canada',r:40},{f:'🇧🇦',n:'Bosnia-Herz.',r:55},{f:'🇲🇦',n:'Morocco',r:14},{f:'🇺🇾',n:'Playoff W',r:null}]},
+  {name:'C',teams:[{f:'🇩🇪',n:'Germany',r:12},{f:'🇨🇼',n:'Curaçao',r:83},{f:'🇨🇮',n:"Côte d'Ivoire",r:30},{f:'🇪🇨',n:'Ecuador',r:35}]},
+  {name:'D',teams:[{f:'🇺🇸',n:'USA',r:11},{f:'🇵🇾',n:'Paraguay',r:63},{f:'🇦🇺',n:'Australia',r:24},{f:'🏴',n:'Playoff W',r:null}]},
+  {name:'E',teams:[{f:'🇫🇷',n:'France',r:2},{f:'🇸🇳',n:'Senegal',r:18},{f:'🇳🇴',n:'Norway',r:34},{f:'🏴',n:'Playoff W',r:null}]},
+  {name:'F',teams:[{f:'🇳🇱',n:'Netherlands',r:7},{f:'🇯🇵',n:'Japan',r:17},{f:'🇹🇳',n:'Tunisia',r:32},{f:'🏴',n:'Playoff W',r:null}]},
+  {name:'G',teams:[{f:'🇧🇪',n:'Belgium',r:3},{f:'🇪🇬',n:'Egypt',r:36},{f:'🇮🇷',n:'Iran',r:22},{f:'🇳🇿',n:'New Zealand',r:85}]},
+  {name:'H',teams:[{f:'🇪🇸',n:'Spain',r:6},{f:'🇨🇻',n:'Cape Verde',r:71},{f:'🇸🇦',n:'Saudi Arabia',r:56},{f:'🇺🇾',n:'Uruguay',r:20}]},
+  {name:'I',teams:[{f:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',n:'England',r:5},{f:'🇭🇷',n:'Croatia',r:10},{f:'🇬🇭',n:'Ghana',r:60},{f:'🇵🇦',n:'Panama',r:72}]},
+  {name:'J',teams:[{f:'🇦🇷',n:'Argentina',r:1},{f:'🇩🇿',n:'Algeria',r:41},{f:'🇦🇹',n:'Austria',r:25},{f:'🇯🇴',n:'Jordan',r:88}]},
+  {name:'K',teams:[{f:'🇵🇹',n:'Portugal',r:8},{f:'🇺🇿',n:'Uzbekistan',r:68},{f:'🇨🇴',n:'Colombia',r:27},{f:'🏴',n:'Playoff W',r:null}]},
+  {name:'L',teams:[{f:'🇧🇷',n:'Brazil',r:4},{f:'🇲🇽',n:'Mexico 2',r:15},{f:'🇨🇱',n:'Chile',r:45},{f:'🇵🇪',n:'Peru',r:52}]},
+];
+
+const state = {
+  user:{},
+  groupPicks:{},
+  r32Picks:{},
+  r16Picks:{},
+  qfPicks:{},
+  sfPicks:{},
+  finalPick:null,
+  currentPage:'page-landing',
+  entryTime:null
+};
+
+const pageOrder = ['page-landing','page-register','page-groups','page-knockouts','page-final','page-confirm'];
+
+function goTo(pageId){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(pageId).style.display='';
+  document.getElementById(pageId).classList.add('active');
+  state.currentPage=pageId;
+  window.scrollTo(0,0);
+  updateBottomNav();
+  if(pageId==='page-groups') renderGroups();
+  if(pageId==='page-knockouts') renderKnockouts();
+  if(pageId==='page-final') renderFinal();
+  if(pageId==='page-confirm') renderConfirm();
+}
+
+function goNext(){
+  const idx=pageOrder.indexOf(state.currentPage);
+  if(idx<pageOrder.length-1) goTo(pageOrder[idx+1]);
+}
+function goBack(){
+  const idx=pageOrder.indexOf(state.currentPage);
+  if(idx>0) goTo(pageOrder[idx-1]);
+}
+
+function updateBottomNav(){
+  const nav=document.getElementById('bottom-nav');
+  const p=state.currentPage;
+  if(p==='page-landing'||p==='page-register'||p==='page-confirm'){nav.classList.remove('visible');return;}
+  nav.classList.add('visible');
+  document.getElementById('nav-back-btn').style.display=p==='page-groups'?'none':'block';
+  const counts={
+    'page-groups':`${countGroupPicks()} / 24 teams picked`,
+    'page-knockouts': getKnockoutCount(),
+    'page-final': state.finalPick ? '1 / 1 champion picked' : '0 / 1 champion picked'
+  };
+  document.getElementById('nav-count').textContent=counts[p]||'';
+  const nextLabels={'page-groups':'Knockout Stage →','page-knockouts':'The Final →','page-final':'Submit Entry →'};
+  document.getElementById('nav-next-btn').textContent=nextLabels[p]||'Next →';
+}
+
+function countGroupPicks(){
+  let c=0;
+  for(const g of Object.values(state.groupPicks)) c+=g.length;
+  return c;
+}
+function getKnockoutCount(){
+  const total=Object.keys(state.r32Picks).length+Object.keys(state.r16Picks).length+Object.keys(state.qfPicks).length+Object.keys(state.sfPicks).length;
+  return `${total} / 28 knockout picks`;
+}
+
+function updateNickPreview(){
+  const v=document.getElementById('reg-nick').value.trim();
+  const p=document.getElementById('nick-preview');
+  if(v.length>2) p.textContent=`Your leaderboard name: "${v}" 🔥`;
+  else p.textContent='';
+}
+
+function submitRegister(){
+  const name=document.getElementById('reg-name').value.trim();
+  const nick=document.getElementById('reg-nick').value.trim();
+  const insta=document.getElementById('reg-insta').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const phone=document.getElementById('reg-phone').value.trim();
+  if(!name||!nick||!insta||!email||!phone){
+    alert('Please fill in all fields to continue.');return;
+  }
+  state.user={name,nick,insta,email,phone};
+  state.entryTime=new Date().toISOString();
+  goTo('page-groups');
+}
+
+function renderGroups(){
+  const grid=document.getElementById('groups-grid');
+  grid.innerHTML='';
+  WC_GROUPS.forEach(g=>{
+    const picks=state.groupPicks[g.name]||[];
+    const card=document.createElement('div');
+    card.className='group-card';
+    card.innerHTML=`
+      <div class="group-card-header">
+        <div class="group-name">Group ${g.name}</div>
+        <div class="group-instruction">${picks.length}/2 through</div>
+      </div>
+      ${g.teams.map((t,i)=>{
+        const isFirst=picks[0]===t.n;
+        const isSecond=picks[1]===t.n;
+        const pickClass=isFirst?'winner':isSecond?'selected':'';
+        return `<div class="team-row" onclick="toggleGroupPick('${g.name}','${t.n}','${g.name}-card')">
+          <span class="team-flag">${t.f}</span>
+          <span class="team-name">${t.n}</span>
+          ${t.r?`<span class="team-rank">#${t.r}</span>`:''}
+          <div class="team-pick ${pickClass}"></div>
+        </div>`;
+      }).join('')}
+      <div class="pick-label">
+        ${picks[0]?`<span style="color:var(--gold)">★ ${picks[0]}</span> ${picks[1]?`· <span style="color:var(--blue)">✓ ${picks[1]}</span>`:''}`:
+        '<span style="color:var(--gray)">Pick group winner first</span>'}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function toggleGroupPick(groupName,teamName){
+  const picks=state.groupPicks[groupName]||[];
+  const idx=picks.indexOf(teamName);
+  if(idx>-1){
+    picks.splice(idx,1);
+  } else if(picks.length<2){
+    picks.push(teamName);
+  } else {
+    picks.shift();picks.push(teamName);
+  }
+  state.groupPicks[groupName]=picks;
+  renderGroups();
+  updateBottomNav();
+}
+
+function getGroupAdvancers(){
+  const advancers=[];
+  for(const g of WC_GROUPS){
+    const picks=state.groupPicks[g.name]||[];
+    advancers.push({group:g.name,winner:picks[0]||'TBD',runnerup:picks[1]||'TBD'});
+  }
+  return advancers;
+}
+
+function buildR32Matchups(){
+  const a=getGroupAdvancers();
+  const matchups=[];
+  const pairs=[
+    ['A','B'],['C','D'],['E','F'],['G','H'],
+    ['I','J'],['K','L'],['A','C'],['B','D'],
+    ['E','G'],['F','H'],['I','K'],['J','L'],
+    ['A','D'],['B','C'],['E','H'],['F','G']
+  ];
+  pairs.forEach((pair,i)=>{
+    const g1=a.find(x=>x.group===pair[0]);
+    const g2=a.find(x=>x.group===pair[1]);
+    matchups.push({
+      id:`r32_${i}`,
+      label:`Match ${i+1}`,
+      team1:g1?g1.winner:'TBD',
+      team2:g2?g2.runnerup:'TBD',
+      flag1:getFlag(g1?g1.winner:''),
+      flag2:getFlag(g2?g2.runnerup:'')
+    });
+  });
+  return matchups;
+}
+
+function getFlag(name){
+  for(const g of WC_GROUPS){for(const t of g.teams){if(t.n===name)return t.f;}}
+  return '🏴';
+}
+
+function renderKnockouts(){
+  const wrap=document.getElementById('knockout-wrap');
+  wrap.innerHTML='';
+
+  const r32=buildR32Matchups();
+  appendRound(wrap,'Round of 32',r32,'r32Picks',16);
+
+  const r16=buildNextRound('r32Picks',r32,16,'r16');
+  appendRound(wrap,'Round of 16',r16,'r16Picks',8);
+
+  const qf=buildNextRound('r16Picks',r16,8,'qf');
+  appendRound(wrap,'Quarter-Finals',qf,'qfPicks',4);
+
+  const sf=buildNextRound('qfPicks',qf,4,'sf');
+  appendRound(wrap,'Semi-Finals',sf,'sfPicks',2);
+}
+
+function buildNextRound(prevPicksKey,prevMatchups,count,prefix){
+  const picks=state[prevPicksKey];
+  const matchups=[];
+  for(let i=0;i<count/2;i++){
+    const m1=prevMatchups[i*2];
+    const m2=prevMatchups[i*2+1];
+    const t1=picks[m1.id]||'TBD';
+    const t2=picks[m2.id]||'TBD';
+    matchups.push({
+      id:`${prefix}_${i}`,
+      label:`Match ${i+1}`,
+      team1:t1,team2:t2,
+      flag1:getFlag(t1),flag2:getFlag(t2)
+    });
+  }
+  return matchups;
+}
+
+function appendRound(wrap,label,matchups,picksKey,cols){
+  const section=document.createElement('div');
+  const grid=document.createElement('div');
+  grid.className='matchup-grid';
+  grid.style.gridTemplateColumns=`repeat(auto-fill,minmax(${cols>8?'180px':'200px'},1fr))`;
+
+  matchups.forEach(m=>{
+    const picked=state[picksKey][m.id];
+    const tbd1=m.team1==='TBD';const tbd2=m.team2==='TBD';
+    const card=document.createElement('div');
+    card.className='matchup-card';
+    card.innerHTML=`
+      <div class="matchup-top">${label} · ${m.label}</div>
+      <div class="matchup-team ${picked===m.team1?'picked':''} ${tbd1?'tbd':''}" onclick="${tbd1?'':` pickKnockout('${picksKey}','${m.id}','${m.team1}')`}">
+        <span class="flag">${m.flag1}</span>
+        <span class="name">${m.team1}</span>
+        <span class="checkmark">✓</span>
+      </div>
+      <div class="matchup-team ${picked===m.team2?'picked':''} ${tbd2?'tbd':''}" onclick="${tbd2?'':` pickKnockout('${picksKey}','${m.id}','${m.team2}')`}">
+        <span class="flag">${m.flag2}</span>
+        <span class="name">${m.team2}</span>
+        <span class="checkmark">✓</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  const title=document.createElement('div');
+  title.className='knockout-title-row';
+  title.innerHTML=`<div class="round-label">${label}</div>`;
+  section.appendChild(title);
+  section.appendChild(grid);
+  section.style.marginBottom='8px';
+  wrap.appendChild(section);
+}
+
+function pickKnockout(picksKey,matchId,team){
+  state[picksKey][matchId]=team;
+  renderKnockouts();
+  updateBottomNav();
+}
+
+function renderFinal(){
+  const sf=state.sfPicks;
+  const sfMatchups=buildNextRound('qfPicks',buildNextRound('r16Picks',buildNextRound('r32Picks',buildR32Matchups(),16,'r16'),8,'qf'),4,'sf');
+  const finalist1=sf[`sf_0`]||null;
+  const finalist2=sf[`sf_1`]||null;
+
+  const wrap=document.getElementById('final-matchup');
+  if(!finalist1||!finalist2){
+    wrap.innerHTML='<div style="color:var(--gray);font-size:14px;padding:20px">Complete all knockout picks to unlock the final</div>';
+    return;
+  }
+  const picked=state.finalPick;
+  wrap.innerHTML=`
+    <div class="finalist-card ${picked===finalist1?'winner-pick':''}" onclick="pickFinal('${finalist1}')">
+      <div class="finalist-flag">${getFlag(finalist1)}</div>
+      <div class="finalist-name">${finalist1}</div>
+      ${picked===finalist1?'<div style="color:var(--gold);font-size:11px;margin-top:4px">YOUR PICK ★</div>':''}
+    </div>
+    <div class="vs-label">VS</div>
+    <div class="finalist-card ${picked===finalist2?'winner-pick':''}" onclick="pickFinal('${finalist2}')">
+      <div class="finalist-flag">${getFlag(finalist2)}</div>
+      <div class="finalist-name">${finalist2}</div>
+      ${picked===finalist2?'<div style="color:var(--gold);font-size:11px;margin-top:4px">YOUR PICK ★</div>':''}
+    </div>
+  `;
+}
+
+function pickFinal(team){
+  state.finalPick=team;
+  renderFinal();
+  updateBottomNav();
+}
+
+function renderConfirm(){
+  const el=document.getElementById('entry-summary');
+  const t=new Date(state.entryTime);
+  const fmt=t.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})+' · '+t.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  el.innerHTML=`
+    <div class="entry-row"><span class="entry-key">Predictor</span><span class="entry-val">${state.user.nick||'—'}</span></div>
+    <div class="entry-row"><span class="entry-key">Instagram</span><span class="entry-val">${state.user.insta||'—'}</span></div>
+    <div class="entry-row"><span class="entry-key">Champion Pick</span><span class="entry-val gold">${state.finalPick||'—'} ${getFlag(state.finalPick||'')}</span></div>
+    <div class="entry-row"><span class="entry-key">Entry Locked</span><span class="entry-val">${fmt}</span></div>
+    <div class="entry-row"><span class="entry-key">Status</span><span class="entry-val" style="color:var(--green)">✓ Confirmed</span></div>
+  `;
+  document.getElementById('bottom-nav').classList.remove('visible');
+}
+
+function shareEntry(){
+  const text=`I just predicted my full World Cup 2026 path on PitchSide Predictor! My champion: ${state.finalPick} ${getFlag(state.finalPick||'')} 🏆\n\nEnter now for a chance to win an iPhone 17 Pro 👉 @thepitchsidetv\n#WC2026 #PitchSideTV`;
+  if(navigator.share){navigator.share({text});}
+  else{navigator.clipboard.writeText(text);alert('Copied to clipboard!');}
+}
+
+document.querySelectorAll('.page').forEach(p=>{
+  if(p.id!=='page-landing')p.style.display='none';
+});
+</script>
+</body>
+</html>
