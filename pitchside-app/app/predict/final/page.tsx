@@ -10,7 +10,7 @@ import BottomNav from '@/components/BottomNav';
 export default function FinalPage() {
   const router = useRouter();
   const store = usePredictionStore();
-  const { groupPicks, r32Picks, r16Picks, qfPicks, sfPicks, finalPick, setFinalPick, setSubmitted, user } = store;
+  const { groupPicks, r32Picks, r16Picks, qfPicks, sfPicks, finalPick, setFinalPick, setSubmitted, user, fingerprint } = store;
   const [loading, setLoading] = useState(false);
 
   if (!user) {
@@ -39,6 +39,7 @@ export default function FinalPage() {
         sfPicks,
         finalPick,
         entryTime: store.entryTime,
+        fingerprint,
       };
 
       const res = await fetch('/api/submit', {

@@ -9,6 +9,7 @@ interface PredictionStore extends PredictionState {
   setGroupPick: (groupName: string, teamName: string) => void;
   setKnockoutPick: (round: 'r32Picks' | 'r16Picks' | 'qfPicks' | 'sfPicks', matchId: string, team: string) => void;
   setFinalPick: (team: string) => void;
+  setFingerprint: (id: string) => void;
   setSubmitted: () => void;
   reset: () => void;
 }
@@ -23,6 +24,7 @@ const initialState: PredictionState = {
   finalPick: null,
   entryTime: null,
   submitted: false,
+  fingerprint: null,
 };
 
 export const usePredictionStore = create<PredictionStore>()(
@@ -52,6 +54,8 @@ export const usePredictionStore = create<PredictionStore>()(
       },
 
       setFinalPick: (team) => set({ finalPick: team }),
+
+      setFingerprint: (id) => set({ fingerprint: id }),
 
       setSubmitted: () => set({ submitted: true }),
 

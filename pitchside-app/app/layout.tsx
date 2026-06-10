@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Nav from '@/components/Nav';
+import FingerprintProvider from '@/components/FingerprintProvider';
 
 export const metadata: Metadata = {
   title: 'PitchSide Predictor — Win an iPhone 17 Pro',
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <FingerprintProvider />
         <Nav />
         <div className="page-shell">{children}</div>
         <div className="pitch-watermark">PITCHSIDE TV</div>

@@ -36,6 +36,7 @@ export interface PredictionState {
   finalPick: string | null;
   entryTime: string | null;
   submitted: boolean;
+  fingerprint: string | null; // FingerprintJS visitor ID
 }
 
 export interface SubmitPayload {
@@ -47,4 +48,5 @@ export interface SubmitPayload {
   sfPicks: Record<string, string>;
   finalPick: string;
   entryTime: string;
+  fingerprint: string | null;
 }

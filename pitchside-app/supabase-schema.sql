@@ -9,9 +9,11 @@ CREATE TABLE IF NOT EXISTS pitchside_entries (
   -- User info
   name            TEXT NOT NULL,
   nick            TEXT NOT NULL,
-  instagram       TEXT NOT NULL,
+
+  -- All 3 are UNIQUE — enforced at DB level as final safety net
+  instagram       TEXT NOT NULL UNIQUE,
   email           TEXT NOT NULL UNIQUE,
-  phone           TEXT NOT NULL,
+  phone           TEXT NOT NULL UNIQUE,     -- stored normalised: +91XXXXXXXXXX
 
   -- Picks (stored as JSONB for flexibility)
   final_pick      TEXT NOT NULL,
@@ -21,37 +23,46 @@ CREATE TABLE IF NOT EXISTS pitchside_entries (
   qf_picks        JSONB NOT NULL DEFAULT '{}',
   sf_picks        JSONB NOT NULL DEFAULT '{}',
 
-  -- Timestamps
-  entry_time      TIMESTAMPTZ NOT NULL,  -- when user started filling form
-  submitted_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  -- Anti-fraud signals
+  fingerprint_hash  TEXT UNIQUE,            -- FingerprintJS visitor ID (nullable — browser may block)
+  ip_address        TEXT,                   -- logged for review, NOT used as hard block
 
-  -- Metadata
-  ip_address      TEXT,
+  -- Timestamps
+  entry_time      TIMESTAMPTZ NOT NULL,     -- when user started filling form
+  submitted_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Index for fast duplicate-email lookups
-CREATE INDEX IF NOT EXISTS idx_pitchside_entries_email ON pitchside_entries (email);
+-- ── Indexes ─────────────────────────────────────────────────
 
--- Index for leaderboard / winner determination queries
-CREATE INDEX IF NOT EXISTS idx_pitchside_entries_submitted ON pitchside_entries (submitted_at);
+-- Fast duplicate lookups (UNIQUE already creates an index, but explicit for clarity)
+CREATE INDEX IF NOT EXISTS idx_pitchside_email       ON pitchside_entries (email);
+CREATE INDEX IF NOT EXISTS idx_pitchside_phone       ON pitchside_entries (phone);
+CREATE INDEX IF NOT EXISTS idx_pitchside_instagram   ON pitchside_entries (instagram);
+CREATE INDEX IF NOT EXISTS idx_pitchside_fingerprint ON pitchside_entries (fingerprint_hash);
 
--- ============================================================
--- Row Level Security
--- Allow anyone to INSERT (anon), but only service role can SELECT
--- ============================================================
+-- Leaderboard / winner determination
+CREATE INDEX IF NOT EXISTS idx_pitchside_submitted   ON pitchside_entries (submitted_at);
+
+-- ── Row Level Security ───────────────────────────────────────
 ALTER TABLE pitchside_entries ENABLE ROW LEVEL SECURITY;
 
--- Policy: anyone can insert (new entry)
+-- Anyone (anon) can INSERT a new entry
 CREATE POLICY "Allow public insert"
   ON pitchside_entries
   FOR INSERT
   TO anon
   WITH CHECK (true);
 
--- Policy: only authenticated/service role can read
+-- Only service_role (your server) can SELECT — users never see other entries
 CREATE POLICY "Service role can read all"
   ON pitchside_entries
   FOR SELECT
   TO service_role
   USING (true);
+
+-- ── Migration: run this if you already created the table without these columns ──
+-- ALTER TABLE pitchside_entries ADD COLUMN IF NOT EXISTS fingerprint_hash TEXT UNIQUE;
+-- ALTER TABLE pitchside_entries ADD COLUMN IF NOT EXISTS ip_address TEXT;
+-- ALTER TABLE pitchside_entries ADD CONSTRAINT pitchside_entries_phone_key UNIQUE (phone);
+-- ALTER TABLE pitchside_entries ADD CONSTRAINT pitchside_entries_instagram_key UNIQUE (instagram);

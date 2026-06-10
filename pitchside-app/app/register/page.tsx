@@ -38,7 +38,15 @@ export default function RegisterPage() {
     if (!form.insta.trim()) e.insta = 'Instagram handle is required';
     if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email))
       e.email = 'Valid email is required';
-    if (!form.phone.trim()) e.phone = 'Phone number is required';
+    // Phone: require country code — must start with + after stripping spaces
+    const rawPhone = form.phone.trim().replace(/[\s\-().]/g, '');
+    if (!rawPhone) {
+      e.phone = 'Phone number is required';
+    } else if (!rawPhone.startsWith('+')) {
+      e.phone = 'Include your country code (e.g. +91 9876543210)';
+    } else if (rawPhone.length < 8) {
+      e.phone = 'Phone number is too short';
+    }
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -152,6 +160,7 @@ export default function RegisterPage() {
           onChange={(e) => handleChange('phone', e.target.value)}
         />
         {errors.phone && <div className="form-error">{errors.phone}</div>}
+        <div className="form-hint">Include country code — e.g. +91 for India, +44 for UK</div>
       </div>
 
       <button
