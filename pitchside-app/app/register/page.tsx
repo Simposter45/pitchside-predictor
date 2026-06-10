@@ -14,6 +14,7 @@ export default function RegisterPage() {
     nick: '',
     insta: '',
     email: '',
+    countryCode: '+91',
     phone: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -38,12 +39,10 @@ export default function RegisterPage() {
     if (!form.insta.trim()) e.insta = 'Instagram handle is required';
     if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email))
       e.email = 'Valid email is required';
-    // Phone: require country code — must start with + after stripping spaces
+    // Phone: ensure it has a valid length
     const rawPhone = form.phone.trim().replace(/[\s\-().]/g, '');
     if (!rawPhone) {
       e.phone = 'Phone number is required';
-    } else if (!rawPhone.startsWith('+')) {
-      e.phone = 'Include your country code (e.g. +91 9876543210)';
     } else if (rawPhone.length < 8) {
       e.phone = 'Phone number is too short';
     }
@@ -62,7 +61,7 @@ export default function RegisterPage() {
           ? form.insta.trim()
           : `@${form.insta.trim()}`,
         email: form.email.trim().toLowerCase(),
-        phone: form.phone.trim(),
+        phone: `${form.countryCode}${form.phone.trim()}`,
       });
       router.push('/predict/groups');
     } finally {
@@ -150,17 +149,55 @@ export default function RegisterPage() {
       {/* Phone */}
       <div className="form-group">
         <label className="form-label">Phone</label>
-        <input
-          id="reg-phone"
-          className={`form-input ${errors.phone ? 'error' : ''}`}
-          type="tel"
-          placeholder="+91 ..."
-          autoComplete="off"
-          value={form.phone}
-          onChange={(e) => handleChange('phone', e.target.value)}
-        />
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <select
+            className={`form-input`}
+            style={{ width: '100px', flexShrink: 0, paddingRight: '4px' }}
+            value={form.countryCode}
+            onChange={(e) => handleChange('countryCode', e.target.value)}
+          >
+            <option value="+1">+1 (US/CA)</option>
+            <option value="+44">+44 (UK)</option>
+            <option value="+91">+91 (IN)</option>
+            <option value="+61">+61 (AU)</option>
+            <option value="+971">+971 (UAE)</option>
+            <option value="+966">+966 (KSA)</option>
+            <option value="+27">+27 (ZA)</option>
+            <option value="+234">+234 (NG)</option>
+            <option value="+86">+86 (CN)</option>
+            <option value="+81">+81 (JP)</option>
+            <option value="+49">+49 (DE)</option>
+            <option value="+33">+33 (FR)</option>
+            <option value="+34">+34 (ES)</option>
+            <option value="+39">+39 (IT)</option>
+            <option value="+55">+55 (BR)</option>
+            <option value="+52">+52 (MX)</option>
+            <option value="+54">+54 (AR)</option>
+            <option value="+56">+56 (CL)</option>
+            <option value="+57">+57 (CO)</option>
+            <option value="+51">+51 (PE)</option>
+            <option value="+82">+82 (KR)</option>
+            <option value="+62">+62 (ID)</option>
+            <option value="+60">+60 (MY)</option>
+            <option value="+65">+65 (SG)</option>
+            <option value="+63">+63 (PH)</option>
+            <option value="+66">+66 (TH)</option>
+            <option value="+84">+84 (VN)</option>
+            <option value="+92">+92 (PK)</option>
+            <option value="+880">+880 (BD)</option>
+            <option value="+94">+94 (LK)</option>
+          </select>
+          <input
+            id="reg-phone"
+            className={`form-input ${errors.phone ? 'error' : ''}`}
+            type="tel"
+            placeholder="98765 43210"
+            autoComplete="off"
+            value={form.phone}
+            onChange={(e) => handleChange('phone', e.target.value)}
+          />
+        </div>
         {errors.phone && <div className="form-error">{errors.phone}</div>}
-        <div className="form-hint">Include country code — e.g. +91 for India, +44 for UK</div>
       </div>
 
       <button
