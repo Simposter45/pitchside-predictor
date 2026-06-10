@@ -60,10 +60,12 @@ export default function GroupCard({ group }: GroupCardProps) {
 
       <div className="pick-label" style={{ fontSize: '13px' }}>
         {picks.length > 0 ? (
-          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {picks[0] && <span style={{ color: 'var(--gold)' }}>1st: {picks[0]}</span>}
-            {picks[1] && <span style={{ color: 'var(--blue)' }}>2nd: {picks[1]}</span>}
-            {picks[2] && <span style={{ color: 'var(--gray)' }}>3rd: {picks[2]}</span>}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              {picks[0] && <span style={{ color: 'var(--gold)' }}>1st: {picks[0]}</span>}
+              {picks[1] && <span style={{ color: 'var(--blue)' }}>2nd: {picks[1]}</span>}
+            </div>
+            {picks[2] && <div style={{ color: 'var(--gray)' }}>3rd: {picks[2]}</div>}
           </div>
         ) : (
           <span style={{ color: 'var(--gray)' }}>Pick 1st place</span>
