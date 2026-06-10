@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 import { usePredictionStore } from '@/lib/store';
 import { buildAllKnockoutRounds } from '@/lib/data';
 import MatchupCard from '@/components/MatchupCard';
@@ -18,14 +19,47 @@ interface RoundSection {
 
 export default function KnockoutsPage() {
   const router = useRouter();
-  const { groupPicks, r32Picks, r16Picks, qfPicks, sfPicks, user } = usePredictionStore();
+  const { groupPicks, thirdPicks, r32Picks, r16Picks, qfPicks, sfPicks, user } = usePredictionStore();
 
+  const prevR32Count = useRef(Object.keys(r32Picks).length);
+  const prevR16Count = useRef(Object.keys(r16Picks).length);
+  const prevQfCount = useRef(Object.keys(qfPicks).length);
+  
+  const colRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // 1. All hooks must be called at the top level
+  useEffect(() => {
+    if (!user) {
+      router.replace('/register');
+    }
+  }, [user, router]);
+
+  useEffect(() => {
+    const r32C = Object.keys(r32Picks).length;
+    if (r32C === 16 && prevR32Count.current < 16) {
+      setTimeout(() => colRefs.current[1]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }), 300);
+    }
+    prevR32Count.current = r32C;
+
+    const r16C = Object.keys(r16Picks).length;
+    if (r16C === 8 && prevR16Count.current < 8) {
+      setTimeout(() => colRefs.current[2]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }), 300);
+    }
+    prevR16Count.current = r16C;
+
+    const qfC = Object.keys(qfPicks).length;
+    if (qfC === 4 && prevQfCount.current < 4) {
+      setTimeout(() => colRefs.current[3]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }), 300);
+    }
+    prevQfCount.current = qfC;
+  }, [r32Picks, r16Picks, qfPicks]);
+
+  // 2. Early return AFTER hooks
   if (!user) {
-    if (typeof window !== 'undefined') router.replace('/register');
     return null;
   }
 
-  const { r32, r16, qf, sf } = buildAllKnockoutRounds(groupPicks, r32Picks, r16Picks, qfPicks);
+  const { r32, r16, qf, sf } = buildAllKnockoutRounds(groupPicks, thirdPicks, r32Picks, r16Picks, qfPicks);
 
   const rounds: RoundSection[] = [
     { label: 'Round of 32', matchups: r32, key: 'r32Picks' },
@@ -56,21 +90,14 @@ export default function KnockoutsPage() {
       <div className="bracket-header">
         <h1>Knockout Rounds</h1>
         <p>Pick the winner of each match through to the semi-finals.</p>
-        <ProgressBar step={2} />
+        <ProgressBar step={3} />
       </div>
 
-      <div className="knockout-wrap">
-        {rounds.map(({ label, matchups, key }) => (
-          <div key={key} style={{ marginBottom: 8 }}>
-            <div className="knockout-title-row">
-              <div className="round-label">{label}</div>
-            </div>
-            <div
-              className="matchup-grid"
-              style={{
-                gridTemplateColumns: `repeat(auto-fill, minmax(${matchups.length > 8 ? '180px' : '200px'}, 1fr))`,
-              }}
-            >
+      <div className="horizontal-bracket-container">
+        {rounds.map(({ label, matchups, key }, i) => (
+          <div key={key} className="bracket-column" ref={(el) => { colRefs.current[i] = el; }}>
+            <div className="round-label sticky-top">{label}</div>
+            <div className="bracket-matches">
               {matchups.map((m) => (
                 <MatchupCard key={m.id} matchup={m} roundKey={key} roundLabel={label} />
               ))}

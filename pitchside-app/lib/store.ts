@@ -7,6 +7,7 @@ import { PredictionState, User } from '@/types';
 interface PredictionStore extends PredictionState {
   setUser: (user: User) => void;
   setGroupPick: (groupName: string, teamName: string) => void;
+  setThirdPick: (teamName: string) => void;
   setKnockoutPick: (round: 'r32Picks' | 'r16Picks' | 'qfPicks' | 'sfPicks', matchId: string, team: string) => void;
   setFinalPick: (team: string) => void;
   setFingerprint: (id: string) => void;
@@ -17,6 +18,7 @@ interface PredictionStore extends PredictionState {
 const initialState: PredictionState = {
   user: null,
   groupPicks: {},
+  thirdPicks: [],
   r32Picks: {},
   r16Picks: {},
   qfPicks: {},
@@ -40,13 +42,23 @@ export const usePredictionStore = create<PredictionStore>()(
         const idx = picks.indexOf(teamName);
         if (idx > -1) {
           picks.splice(idx, 1);
-        } else if (picks.length < 2) {
+        } else if (picks.length < 3) {
           picks.push(teamName);
         } else {
           picks.shift();
           picks.push(teamName);
         }
         set({ groupPicks: { ...get().groupPicks, [groupName]: picks } });
+      },
+
+      setThirdPick: (teamName) => {
+        const current = get().thirdPicks;
+        const idx = current.indexOf(teamName);
+        if (idx > -1) {
+          set({ thirdPicks: current.filter((t) => t !== teamName) });
+        } else if (current.length < 8) {
+          set({ thirdPicks: [...current, teamName] });
+        }
       },
 
       setKnockoutPick: (round, matchId, team) => {

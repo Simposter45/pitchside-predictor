@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePredictionStore } from '@/lib/store';
 import { buildAllKnockoutRounds, getFlag } from '@/lib/data';
@@ -10,15 +10,20 @@ import BottomNav from '@/components/BottomNav';
 export default function FinalPage() {
   const router = useRouter();
   const store = usePredictionStore();
-  const { groupPicks, r32Picks, r16Picks, qfPicks, sfPicks, finalPick, setFinalPick, setSubmitted, user, fingerprint } = store;
+  const { groupPicks, r32Picks, r16Picks, qfPicks, sfPicks, finalPick, setFinalPick, setSubmitted, user, fingerprint, thirdPicks } = store;
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (!user) {
+      router.replace('/register');
+    }
+  }, [user, router]);
+
   if (!user) {
-    if (typeof window !== 'undefined') router.replace('/register');
     return null;
   }
 
-  const { sf } = buildAllKnockoutRounds(groupPicks, r32Picks, r16Picks, qfPicks);
+  const { sf } = buildAllKnockoutRounds(groupPicks, thirdPicks, r32Picks, r16Picks, qfPicks);
   const finalist1 = sfPicks[sf[0]?.id] || null;
   const finalist2 = sfPicks[sf[1]?.id] || null;
   const finalistsReady = finalist1 && finalist2;
@@ -33,6 +38,7 @@ export default function FinalPage() {
       const payload = {
         user,
         groupPicks,
+        thirdPicks,
         r32Picks,
         r16Picks,
         qfPicks,
@@ -70,7 +76,7 @@ export default function FinalPage() {
       <div className="bracket-header">
         <h1>The Final</h1>
         <p>Who lifts the trophy at MetLife Stadium on July 19?</p>
-        <ProgressBar step={3} />
+        <ProgressBar step={4} />
       </div>
 
       <div className="final-wrap">
@@ -92,7 +98,9 @@ export default function FinalPage() {
                   className={`finalist-card ${finalPick === team ? 'winner-pick' : ''}`}
                   onClick={() => team && setFinalPick(team)}
                 >
-                  <div className="finalist-flag">{getFlag(team!)}</div>
+                  <div className="finalist-flag">
+                    <img src={`https://flagcdn.com/w80/${getFlag(team!)}.png`} alt={team!} style={{ width: '48px', borderRadius: '4px', display: 'inline-block' }} />
+                  </div>
                   <div className="finalist-name">{team}</div>
                   {finalPick === team && (
                     <div className="finalist-your-pick">YOUR PICK ★</div>

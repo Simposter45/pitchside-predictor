@@ -28,7 +28,8 @@ export interface KnockoutMatchup {
 
 export interface PredictionState {
   user: User | null;
-  groupPicks: Record<string, string[]>; // groupName -> [winner, runnerup]
+  groupPicks: Record<string, string[]>; // groupName -> [winner, runnerup, third]
+  thirdPicks: string[];                 // 8 chosen third-place teams
   r32Picks: Record<string, string>; // matchId -> teamName
   r16Picks: Record<string, string>;
   qfPicks: Record<string, string>;
@@ -42,6 +43,7 @@ export interface PredictionState {
 export interface SubmitPayload {
   user: User;
   groupPicks: Record<string, string[]>;
+  thirdPicks: string[];
   r32Picks: Record<string, string>;
   r16Picks: Record<string, string>;
   qfPicks: Record<string, string>;

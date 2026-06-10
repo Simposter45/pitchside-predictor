@@ -21,24 +21,32 @@ export default function MatchupCard({ matchup, roundKey, roundLabel }: MatchupCa
 
   return (
     <div className="matchup-card">
-      <div className="matchup-top">
-        {roundLabel} · {matchup.label}
-      </div>
-      <div
-        className={`matchup-team ${picked === matchup.team1 ? 'picked' : ''} ${tbd1 ? 'tbd' : ''}`}
-        onClick={() => !tbd1 && setKnockoutPick(roundKey, matchup.id, matchup.team1)}
-      >
-        <span className="flag">{matchup.flag1}</span>
-        <span className="name">{matchup.team1}</span>
-        <span className="checkmark">✓</span>
-      </div>
-      <div
-        className={`matchup-team ${picked === matchup.team2 ? 'picked' : ''} ${tbd2 ? 'tbd' : ''}`}
-        onClick={() => !tbd2 && setKnockoutPick(roundKey, matchup.id, matchup.team2)}
-      >
-        <span className="flag">{matchup.flag2}</span>
-        <span className="name">{matchup.team2}</span>
-        <span className="checkmark">✓</span>
+      <div className="matchup-card-inner">
+        <div className="matchup-top">
+          {roundLabel} · {matchup.label}
+        </div>
+        <div className="matchup-body">
+          <div
+            className={`matchup-team ${picked === matchup.team1 ? 'picked' : ''} ${tbd1 ? 'tbd' : ''}`}
+            onClick={() => !tbd1 && setKnockoutPick(roundKey, matchup.id, matchup.team1)}
+          >
+            <span className="flag">
+              <img src={`https://flagcdn.com/w40/${matchup.flag1}.png`} alt={matchup.team1} style={{ width: '18px', borderRadius: '2px', display: 'block' }} />
+            </span>
+            <span className="name">{matchup.team1}</span>
+            <span className="checkmark">✓</span>
+          </div>
+          <div
+            className={`matchup-team ${picked === matchup.team2 ? 'picked' : ''} ${tbd2 ? 'tbd' : ''}`}
+            onClick={() => !tbd2 && setKnockoutPick(roundKey, matchup.id, matchup.team2)}
+          >
+            <span className="flag">
+              <img src={`https://flagcdn.com/w40/${matchup.flag2}.png`} alt={matchup.team2} style={{ width: '18px', borderRadius: '2px', display: 'block' }} />
+            </span>
+            <span className="name">{matchup.team2}</span>
+            <span className="checkmark">✓</span>
+          </div>
+        </div>
       </div>
     </div>
   );

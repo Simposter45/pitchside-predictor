@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import Leaderboard from '@/components/Leaderboard';
 
 export const metadata: Metadata = {
-  title: 'PitchSide Predictor — Predict the FIFA World Cup 2026 Path',
+  title: 'PitchSide Predictor — Free World Cup 2026 Bracket Predictor | Win iPhone 17 Pro',
   description:
-    'Free contest: Pick every World Cup 2026 match winner. The fastest correct full bracket wins an iPhone 17 Pro. Follow @thepitchsidetv to enter.',
+    'Predict the full FIFA World Cup 2026 path for free. Pick every group winner and knockout match. Fastest correct prediction wins an iPhone 17 Pro. Enter now.',
 };
 
 export default function LandingPage() {
@@ -62,9 +63,23 @@ export default function LandingPage() {
             <li>Pick the winner of every match — group stage through the final</li>
             <li>Submit your full path before matches begin</li>
             <li>The earliest entry with a 100% correct path wins</li>
+            <li><strong>Tie-Breaker:</strong> If no one guesses the perfect path, the iPhone will be gifted to the user closest to the path using our Exponential Bracket Points System (10pts for R32, 20pts for R16, 40pts for QF, 80pts for SF, 160pts for Finalists, 320pts for Champion).</li>
             <li>Prize awarded when PitchSide TV reaches 100K followers</li>
             <li>One entry per person. Follow @thepitchsidetv to be eligible.</li>
           </ul>
+        </div>
+      </div>
+      <Leaderboard />
+      
+      <div style={{ textAlign: 'center', padding: '40px 24px', borderTop: '1px solid var(--gray-border)', marginTop: '40px' }}>
+        <p style={{ color: 'var(--gray)', marginBottom: '16px', fontSize: '14px' }}>Follow PitchSide TV</p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <a href="https://www.instagram.com/thepitchsidetv/" target="_blank" rel="noopener noreferrer" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
+            Instagram
+          </a>
+          <a href="https://www.youtube.com/@PitchSideTVOfficial" target="_blank" rel="noopener noreferrer" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
+            YouTube
+          </a>
         </div>
       </div>
     </>

@@ -19,6 +19,8 @@ export default function RegisterPage() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   // If already submitted, redirect to confirm
   if (submitted) {
@@ -34,18 +36,40 @@ export default function RegisterPage() {
   const validate = () => {
     const e: Record<string, string> = {};
     if (!form.name.trim()) e.name = 'Name is required';
-    if (!form.nick.trim() || form.nick.trim().length < 3)
+    if (!form.nick.trim() || form.nick.trim().length < 3) {
       e.nick = 'Nickname must be at least 3 characters';
-    if (!form.insta.trim()) e.insta = 'Instagram handle is required';
-    if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email))
+    }
+    
+    const instaRaw = form.insta.trim().replace(/^@/, '');
+    if (!instaRaw) {
+      e.insta = 'Instagram handle is required';
+    } else if (!/^[a-zA-Z0-9._]{1,30}$/.test(instaRaw)) {
+      e.insta = 'Invalid Instagram handle format';
+    }
+
+    const emailRaw = form.email.trim().toLowerCase();
+    if (!emailRaw || !/\S+@\S+\.\S+/.test(emailRaw)) {
       e.email = 'Valid email is required';
-    // Phone: ensure it has a valid length
+    } else {
+      const domain = emailRaw.split('@')[1];
+      const blocked = ['yopmail.com', 'mailinator.com', 'tempmail.com', '10minutemail.com', 'guerrillamail.com', 'throwawaymail.com', 'temp-mail.org', 'tempmail.net', 'sharklasers.com', 'grr.la', 'mail.ru'];
+      if (blocked.includes(domain)) {
+        e.email = 'Disposable emails are not allowed';
+      }
+    }
+
+    // Phone: ensure it is exactly 10 digits (ignoring the country code)
     const rawPhone = form.phone.trim().replace(/[\s\-().]/g, '');
     if (!rawPhone) {
       e.phone = 'Phone number is required';
-    } else if (rawPhone.length < 8) {
-      e.phone = 'Phone number is too short';
+    } else if (!/^\d{10}$/.test(rawPhone)) {
+      e.phone = 'Please enter exactly 10 digits';
     }
+    
+    if (!acceptedTerms) {
+      e.terms = 'You must agree to the contest rules to enter';
+    }
+    
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -70,7 +94,66 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="register-wrap">
+    <div className="register-split-container">
+      <div className="register-rules-section">
+        <h2 className="rules-heading">Win an iPhone 17 Pro</h2>
+        <p className="rules-intro">Submit your perfect World Cup 2026 bracket to win the grand prize.</p>
+        
+        <ul className="rules-list">
+          <li>
+            <span className="icon">🎯</span>
+            <div>
+              <strong>Predict the Path</strong>
+              <p>Pick the winner of every group and every knockout match through to the final.</p>
+            </div>
+          </li>
+          <li>
+            <span className="icon">⏳</span>
+            <div>
+              <strong>Perfect Bracket Wins</strong>
+              <p>The earliest 100% correct entry wins. No edits allowed after submission.</p>
+            </div>
+          </li>
+          <li>
+            <span className="icon">🛑</span>
+            <div>
+              <strong>One Entry Only</strong>
+              <p>Duplicates are strictly disqualified. Real emails and phone numbers required.</p>
+            </div>
+          </li>
+          <li>
+            <span className="icon">📱</span>
+            <div>
+              <strong>Follow Us</strong>
+              <p>You must follow @thepitchsidetv on Instagram to be eligible.</p>
+            </div>
+          </li>
+          <li>
+            <span className="icon">🔓</span>
+            <div>
+              <strong>The Condition</strong>
+              <p>Prize unlocks when we hit 100k subs on YouTube or Instagram.</p>
+            </div>
+          </li>
+          <li>
+            <span className="icon">⚖️</span>
+            <div>
+              <strong>Tie-Breaker</strong>
+              <p>If no perfect bracket exists, the user with the most points wins (10pts R32, 20pts R16, 40pts QF, 80pts SF, 160pts Finalists, 320pts Champion).</p>
+            </div>
+          </li>
+        </ul>
+
+        <div className="prize-badge" style={{ marginBottom: 0, marginTop: '24px', width: '100%' }}>
+          <span className="trophy">🏆</span>
+          <div className="prize-badge-text">
+            <div className="label">Grand Prize</div>
+            <div className="value">iPhone 17 Pro (256GB)</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="register-wrap">
       <h1 className="register-title">Create Your Entry</h1>
       <p className="register-sub">
         You&apos;ll need this to claim your prize if you win.
@@ -191,6 +274,7 @@ export default function RegisterPage() {
             id="reg-phone"
             className={`form-input ${errors.phone ? 'error' : ''}`}
             type="tel"
+            maxLength={10}
             placeholder="98765 43210"
             autoComplete="off"
             value={form.phone}
@@ -198,6 +282,42 @@ export default function RegisterPage() {
           />
         </div>
         {errors.phone && <div className="form-error">{errors.phone}</div>}
+      </div>
+
+      {/* Terms & Conditions Checkbox */}
+      <div className="form-group" style={{ marginTop: '24px' }}>
+        <div 
+          className="terms-checkbox-label"
+          onClick={() => {
+            if (!acceptedTerms) {
+              setShowModal(true);
+            } else {
+              setAcceptedTerms(false);
+            }
+          }}
+        >
+          <input
+            type="checkbox"
+            className="terms-checkbox"
+            checked={acceptedTerms}
+            readOnly
+          />
+          <span>
+            I agree to the{' '}
+            <button
+              type="button"
+              className="terms-link-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowModal(true);
+              }}
+            >
+              contest rules
+            </button>
+            . One entry per person. Must follow @thepitchsidetv.
+          </span>
+        </div>
+        {errors.terms && <div className="form-error" style={{ marginTop: '8px' }}>{errors.terms}</div>}
       </div>
 
       <button
@@ -209,11 +329,44 @@ export default function RegisterPage() {
         {loading ? 'Saving...' : 'Continue to Group Stage →'}
       </button>
 
-      <p className="terms">
-        By entering you agree to the{' '}
-        <a href="#">contest rules</a>. One entry per person. Must follow
-        @thepitchsidetv.
-      </p>
+      {/* Terms Modal */}
+      {showModal && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setShowModal(false)}>✕</button>
+            <h2>Giveaway Rules</h2>
+            <div className="modal-body">
+              <p><strong>How to win.</strong> Submit a full World Cup 2026 prediction path — every group winner and every knockout match winner through to the champion. The earliest entry with a 100% correct prediction path wins the prize.</p>
+              <p><strong>The prize.</strong> One iPhone 17 Pro (256GB). No cash alternative. Prize is awarded to the winner at no cost.</p>
+              <p><strong>The condition.</strong> The prize is awarded only when PitchSide TV reaches 100,000 subscribers on YouTube or 100,000 followers on Instagram, whichever comes first. If this milestone is not reached, no prize is awarded and no compensation is owed to any entrant.</p>
+              <p><strong>Eligibility.</strong> Open to anyone worldwide. Entrants must follow @thepitchsidetv on Instagram at the time of winner announcement to be eligible.</p>
+              <p><strong>One entry per person.</strong> Duplicate entries are disqualified. Entries must be submitted with a valid email, phone number, and Instagram handle.</p>
+              <p><strong>No edits after submission.</strong> Your prediction path is locked the moment you submit. No changes allowed.</p>
+              <p><strong>Winner determination.</strong> The winning entry is the earliest timestamped entry with a fully correct path. Timestamp is recorded at submission. In the event of a tie, the earlier timestamp wins.</p>
+              <p><strong>Winner notification.</strong> The winner will be contacted via the Instagram handle provided at registration and announced publicly on PitchSide TV.</p>
+              <p style={{ marginTop: '16px' }}>PitchSide TV reserves the right to disqualify any entry found to be fraudulent, duplicate, or in violation of these rules.</p>
+              <p style={{ marginTop: '16px', fontSize: '13px' }}><em>By entering, you confirm you have read and accepted these rules.</em></p>
+              <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid var(--gray-border)', fontSize: '11px', textAlign: 'center' }}>
+                &copy; 2026 PitchSide TV — The World&apos;s Game. Daily.
+              </div>
+              <div style={{ marginTop: '24px' }}>
+                <button
+                  type="button"
+                  className="submit-btn"
+                  onClick={() => {
+                    setAcceptedTerms(true);
+                    if (errors.terms) setErrors((err) => ({ ...err, terms: '' }));
+                    setShowModal(false);
+                  }}
+                >
+                  I Accept the Rules
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
     </div>
   );
 }

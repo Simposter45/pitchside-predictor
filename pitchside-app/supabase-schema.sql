@@ -8,9 +8,8 @@ CREATE TABLE IF NOT EXISTS pitchside_entries (
 
   -- User info
   name            TEXT NOT NULL,
-  nick            TEXT NOT NULL,
-
-  -- All 3 are UNIQUE — enforced at DB level as final safety net
+  -- All 4 are UNIQUE — enforced at DB level as final safety net
+  nick            TEXT NOT NULL UNIQUE,
   instagram       TEXT NOT NULL UNIQUE,
   email           TEXT NOT NULL UNIQUE,
   phone           TEXT NOT NULL UNIQUE,     -- stored normalised: +91XXXXXXXXXX
@@ -18,6 +17,7 @@ CREATE TABLE IF NOT EXISTS pitchside_entries (
   -- Picks (stored as JSONB for flexibility)
   final_pick      TEXT NOT NULL,
   group_picks     JSONB NOT NULL DEFAULT '{}',
+  third_picks     JSONB NOT NULL DEFAULT '{}',
   r32_picks       JSONB NOT NULL DEFAULT '{}',
   r16_picks       JSONB NOT NULL DEFAULT '{}',
   qf_picks        JSONB NOT NULL DEFAULT '{}',
@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS pitchside_entries (
 CREATE INDEX IF NOT EXISTS idx_pitchside_email       ON pitchside_entries (email);
 CREATE INDEX IF NOT EXISTS idx_pitchside_phone       ON pitchside_entries (phone);
 CREATE INDEX IF NOT EXISTS idx_pitchside_instagram   ON pitchside_entries (instagram);
+CREATE INDEX IF NOT EXISTS idx_pitchside_nick        ON pitchside_entries (nick);
 CREATE INDEX IF NOT EXISTS idx_pitchside_fingerprint ON pitchside_entries (fingerprint_hash);
 
 -- Leaderboard / winner determination
@@ -62,7 +63,9 @@ CREATE POLICY "Service role can read all"
   USING (true);
 
 -- ── Migration: run this if you already created the table without these columns ──
+-- ALTER TABLE pitchside_entries ADD COLUMN IF NOT EXISTS third_picks JSONB NOT NULL DEFAULT '{}';
 -- ALTER TABLE pitchside_entries ADD COLUMN IF NOT EXISTS fingerprint_hash TEXT UNIQUE;
 -- ALTER TABLE pitchside_entries ADD COLUMN IF NOT EXISTS ip_address TEXT;
 -- ALTER TABLE pitchside_entries ADD CONSTRAINT pitchside_entries_phone_key UNIQUE (phone);
 -- ALTER TABLE pitchside_entries ADD CONSTRAINT pitchside_entries_instagram_key UNIQUE (instagram);
+-- ALTER TABLE pitchside_entries ADD CONSTRAINT pitchside_entries_nick_key UNIQUE (nick);

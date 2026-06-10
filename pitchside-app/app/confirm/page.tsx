@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { usePredictionStore } from '@/lib/store';
 import { getFlag } from '@/lib/data';
+import Leaderboard from '@/components/Leaderboard';
 
 export default function ConfirmPage() {
   const router = useRouter();
@@ -89,6 +90,45 @@ export default function ConfirmPage() {
           <li>Winner announced when PitchSide TV hits 100K followers</li>
         </ul>
       </div>
+
+      <div style={{ marginTop: 40, width: '100%', maxWidth: '800px', alignSelf: 'center' }}>
+        <Leaderboard />
+      </div>
+
+      <div style={{ textAlign: 'center', padding: '40px 24px', borderTop: '1px solid var(--gray-border)', marginTop: '40px', width: '100%' }}>
+        <p style={{ color: 'var(--gray)', marginBottom: '16px', fontSize: '14px' }}>Follow PitchSide TV</p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+          <a href="https://www.instagram.com/thepitchsidetv/" target="_blank" rel="noopener noreferrer" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
+            Instagram
+          </a>
+          <a href="https://www.youtube.com/@PitchSideTVOfficial" target="_blank" rel="noopener noreferrer" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
+            YouTube
+          </a>
+        </div>
+      </div>
+
+      {process.env.NODE_ENV === 'development' && (
+        <button
+          onClick={() => {
+            usePredictionStore.getState().reset();
+            window.location.href = '/register';
+          }}
+          style={{
+            position: 'fixed',
+            bottom: '10px',
+            right: '10px',
+            opacity: 0.05,
+            background: 'transparent',
+            border: 'none',
+            color: 'white',
+            fontSize: '10px',
+            cursor: 'pointer'
+          }}
+          title="Reset Local Storage (Dev Tool)"
+        >
+          Reset
+        </button>
+      )}
     </div>
   );
 }

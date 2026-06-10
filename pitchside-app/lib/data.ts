@@ -1,18 +1,18 @@
 import { Group, KnockoutMatchup } from '@/types';
 
 export const WC_GROUPS: Group[] = [
-  { name: 'A', teams: [{ f: '🇲🇽', n: 'Mexico', r: 15 }, { f: '🇿🇦', n: 'South Africa', r: 60 }, { f: '🇰🇷', n: 'South Korea', r: 23 }, { f: '🏴', n: 'Playoff W', r: null }] },
-  { name: 'B', teams: [{ f: '🇨🇦', n: 'Canada', r: 40 }, { f: '🇧🇦', n: 'Bosnia-Herz.', r: 55 }, { f: '🇲🇦', n: 'Morocco', r: 14 }, { f: '🇺🇾', n: 'Playoff W', r: null }] },
-  { name: 'C', teams: [{ f: '🇩🇪', n: 'Germany', r: 12 }, { f: '🇨🇼', n: 'Curaçao', r: 83 }, { f: '🇨🇮', n: "Côte d'Ivoire", r: 30 }, { f: '🇪🇨', n: 'Ecuador', r: 35 }] },
-  { name: 'D', teams: [{ f: '🇺🇸', n: 'USA', r: 11 }, { f: '🇵🇾', n: 'Paraguay', r: 63 }, { f: '🇦🇺', n: 'Australia', r: 24 }, { f: '🏴', n: 'Playoff W', r: null }] },
-  { name: 'E', teams: [{ f: '🇫🇷', n: 'France', r: 2 }, { f: '🇸🇳', n: 'Senegal', r: 18 }, { f: '🇳🇴', n: 'Norway', r: 34 }, { f: '🏴', n: 'Playoff W', r: null }] },
-  { name: 'F', teams: [{ f: '🇳🇱', n: 'Netherlands', r: 7 }, { f: '🇯🇵', n: 'Japan', r: 17 }, { f: '🇹🇳', n: 'Tunisia', r: 32 }, { f: '🏴', n: 'Playoff W', r: null }] },
-  { name: 'G', teams: [{ f: '🇧🇪', n: 'Belgium', r: 3 }, { f: '🇪🇬', n: 'Egypt', r: 36 }, { f: '🇮🇷', n: 'Iran', r: 22 }, { f: '🇳🇿', n: 'New Zealand', r: 85 }] },
-  { name: 'H', teams: [{ f: '🇪🇸', n: 'Spain', r: 6 }, { f: '🇨🇻', n: 'Cape Verde', r: 71 }, { f: '🇸🇦', n: 'Saudi Arabia', r: 56 }, { f: '🇺🇾', n: 'Uruguay', r: 20 }] },
-  { name: 'I', teams: [{ f: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', n: 'England', r: 5 }, { f: '🇭🇷', n: 'Croatia', r: 10 }, { f: '🇬🇭', n: 'Ghana', r: 60 }, { f: '🇵🇦', n: 'Panama', r: 72 }] },
-  { name: 'J', teams: [{ f: '🇦🇷', n: 'Argentina', r: 1 }, { f: '🇩🇿', n: 'Algeria', r: 41 }, { f: '🇦🇹', n: 'Austria', r: 25 }, { f: '🇯🇴', n: 'Jordan', r: 88 }] },
-  { name: 'K', teams: [{ f: '🇵🇹', n: 'Portugal', r: 8 }, { f: '🇺🇿', n: 'Uzbekistan', r: 68 }, { f: '🇨🇴', n: 'Colombia', r: 27 }, { f: '🏴', n: 'Playoff W', r: null }] },
-  { name: 'L', teams: [{ f: '🇧🇷', n: 'Brazil', r: 4 }, { f: '🇲🇽', n: 'Mexico 2', r: 15 }, { f: '🇨🇱', n: 'Chile', r: 45 }, { f: '🇵🇪', n: 'Peru', r: 52 }] },
+  { name: 'A', teams: [{ f: 'mx', n: 'Mexico', r: 15 }, { f: 'za', n: 'South Africa', r: 60 }, { f: 'kr', n: 'South Korea', r: 23 }, { f: 'it', n: 'Italy', r: 9 }] },
+  { name: 'B', teams: [{ f: 'ca', n: 'Canada', r: 40 }, { f: 'ba', n: 'Bosnia-Herz.', r: 55 }, { f: 'ma', n: 'Morocco', r: 14 }, { f: 'ng', n: 'Nigeria', r: 28 }] },
+  { name: 'C', teams: [{ f: 'de', n: 'Germany', r: 12 }, { f: 'cw', n: 'Curacao', r: 83 }, { f: 'ci', n: "Cote d'Ivoire", r: 30 }, { f: 'ec', n: 'Ecuador', r: 35 }] },
+  { name: 'D', teams: [{ f: 'us', n: 'USA', r: 11 }, { f: 'py', n: 'Paraguay', r: 63 }, { f: 'au', n: 'Australia', r: 24 }, { f: 'se', n: 'Sweden', r: 26 }] },
+  { name: 'E', teams: [{ f: 'fr', n: 'France', r: 2 }, { f: 'sn', n: 'Senegal', r: 18 }, { f: 'no', n: 'Norway', r: 34 }, { f: 'jp', n: 'Japan', r: 17 }] },
+  { name: 'F', teams: [{ f: 'nl', n: 'Netherlands', r: 7 }, { f: 'tr', n: 'Turkey', r: 42 }, { f: 'tn', n: 'Tunisia', r: 32 }, { f: 'pe', n: 'Peru', r: 35 }] },
+  { name: 'G', teams: [{ f: 'be', n: 'Belgium', r: 3 }, { f: 'eg', n: 'Egypt', r: 36 }, { f: 'ir', n: 'Iran', r: 22 }, { f: 'nz', n: 'New Zealand', r: 85 }] },
+  { name: 'H', teams: [{ f: 'es', n: 'Spain', r: 6 }, { f: 'cv', n: 'Cape Verde', r: 71 }, { f: 'sa', n: 'Saudi Arabia', r: 56 }, { f: 'uy', n: 'Uruguay', r: 20 }] },
+  { name: 'I', teams: [{ f: 'gb-eng', n: 'England', r: 5 }, { f: 'hr', n: 'Croatia', r: 10 }, { f: 'gh', n: 'Ghana', r: 60 }, { f: 'pa', n: 'Panama', r: 72 }] },
+  { name: 'J', teams: [{ f: 'ar', n: 'Argentina', r: 1 }, { f: 'dz', n: 'Algeria', r: 41 }, { f: 'at', n: 'Austria', r: 25 }, { f: 'jo', n: 'Jordan', r: 88 }] },
+  { name: 'K', teams: [{ f: 'pt', n: 'Portugal', r: 8 }, { f: 'uz', n: 'Uzbekistan', r: 68 }, { f: 'co', n: 'Colombia', r: 27 }, { f: 'ch', n: 'Switzerland', r: 19 }] },
+  { name: 'L', teams: [{ f: 'br', n: 'Brazil', r: 4 }, { f: 'dk', n: 'Denmark', r: 21 }, { f: 'cl', n: 'Chile', r: 45 }, { f: 'ml', n: 'Mali', r: 49 }] },
 ];
 
 export function getFlag(name: string): string {
@@ -21,7 +21,7 @@ export function getFlag(name: string): string {
       if (t.n === name) return t.f;
     }
   }
-  return '🏴';
+  return 'un'; // United Nations / generic flag fallback for TBD
 }
 
 export function getGroupAdvancers(groupPicks: Record<string, string[]>) {
@@ -32,21 +32,38 @@ export function getGroupAdvancers(groupPicks: Record<string, string[]>) {
   }));
 }
 
-export function buildR32Matchups(groupPicks: Record<string, string[]>): KnockoutMatchup[] {
-  const a = getGroupAdvancers(groupPicks);
-  const pairs: [string, string][] = [
-    ['A', 'B'], ['C', 'D'], ['E', 'F'], ['G', 'H'],
-    ['I', 'J'], ['K', 'L'], ['A', 'C'], ['B', 'D'],
-    ['E', 'G'], ['F', 'H'], ['I', 'K'], ['J', 'L'],
-    ['A', 'D'], ['B', 'C'], ['E', 'H'], ['F', 'G'],
+export function buildR32Matchups(groupPicks: Record<string, string[]>, thirdPicks: string[]): KnockoutMatchup[] {
+  const w = (gName: string) => groupPicks[gName]?.[0] || 'TBD';
+  const r = (gName: string) => groupPicks[gName]?.[1] || 'TBD';
+  const t = (i: number) => thirdPicks[i] || 'TBD';
+
+  const matchups = [
+    { t1: w('A'), t2: t(0) },
+    { t1: w('B'), t2: t(1) },
+    { t1: w('C'), t2: t(2) },
+    { t1: w('D'), t2: t(3) },
+    { t1: w('E'), t2: t(4) },
+    { t1: w('F'), t2: t(5) },
+    { t1: w('G'), t2: t(6) },
+    { t1: w('H'), t2: t(7) },
+    { t1: w('I'), t2: r('A') },
+    { t1: w('J'), t2: r('B') },
+    { t1: w('K'), t2: r('C') },
+    { t1: w('L'), t2: r('D') },
+    { t1: r('E'), t2: r('I') },
+    { t1: r('F'), t2: r('J') },
+    { t1: r('G'), t2: r('K') },
+    { t1: r('H'), t2: r('L') },
   ];
-  return pairs.map((pair, i) => {
-    const g1 = a.find((x) => x.group === pair[0]);
-    const g2 = a.find((x) => x.group === pair[1]);
-    const t1 = g1?.winner || 'TBD';
-    const t2 = g2?.runnerup || 'TBD';
-    return { id: `r32_${i}`, label: `Match ${i + 1}`, team1: t1, team2: t2, flag1: getFlag(t1), flag2: getFlag(t2) };
-  });
+
+  return matchups.map((m, i) => ({
+    id: `r32_${i}`,
+    label: `Match ${i + 1}`,
+    team1: m.t1,
+    team2: m.t2,
+    flag1: getFlag(m.t1),
+    flag2: getFlag(m.t2),
+  }));
 }
 
 export function buildNextRound(
@@ -68,11 +85,12 @@ export function buildNextRound(
 
 export function buildAllKnockoutRounds(
   groupPicks: Record<string, string[]>,
+  thirdPicks: string[],
   r32Picks: Record<string, string>,
   r16Picks: Record<string, string>,
   qfPicks: Record<string, string>
 ) {
-  const r32 = buildR32Matchups(groupPicks);
+  const r32 = buildR32Matchups(groupPicks, thirdPicks);
   const r16 = buildNextRound(r32Picks, r32, 16, 'r16');
   const qf = buildNextRound(r16Picks, r16, 8, 'qf');
   const sf = buildNextRound(qfPicks, qf, 4, 'sf');

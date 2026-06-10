@@ -16,6 +16,12 @@ function normalizeInstagram(handle: string): string {
   return handle.toLowerCase().replace(/^@/, '').trim();
 }
 
+const DISPOSABLE_DOMAINS = [
+  'yopmail.com', 'mailinator.com', 'tempmail.com', '10minutemail.com',
+  'guerrillamail.com', 'throwawaymail.com', 'temp-mail.org', 'tempmail.net',
+  'sharklasers.com', 'grr.la', 'mail.ru'
+];
+
 // ─── POST /api/submit ───────────────────────────────────────
 export async function POST(req: NextRequest) {
   try {
@@ -23,6 +29,7 @@ export async function POST(req: NextRequest) {
     const {
       user,
       groupPicks,
+      thirdPicks,
       r32Picks,
       r16Picks,
       qfPicks,
@@ -32,32 +39,93 @@ export async function POST(req: NextRequest) {
       fingerprint,
     } = body;
 
-    // ── Basic field validation ──
-    if (!user?.email || !user?.nick || !user?.phone || !user?.insta || !finalPick) {
-      return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
+    // ── Pre-process fields ──
+    let email     = user?.email ? user.email.toLowerCase().trim() : '';
+    let phone     = user?.phone ? normalizePhone(user.phone) : '';
+    let instagram = user?.insta ? normalizeInstagram(user.insta) : '';
+    let nick      = user?.nick ? user.nick.trim() : '';
+    let fp        = fingerprint;
+
+    // ── TESTING BYPASS ──
+    const isTestBypass = process.env.NODE_ENV === 'development' && nick.toUpperCase() === 'TESTER99';
+    
+    if (isTestBypass) {
+      const ts = Date.now().toString();
+      email = `test_${ts}@pitchside.com`;
+      phone = `+91000${ts.slice(-7)}`;
+      instagram = `test_${ts}`;
+      nick = `TESTER99_${ts}`;
+      if (fp) fp = `${fp}_${ts}`;
     }
 
-    const email     = user.email.toLowerCase().trim();
-    const phone     = normalizePhone(user.phone);
-    const instagram = normalizeInstagram(user.insta);
+    // ── Basic field validation ──
+    if (!isTestBypass && (!email || !nick || !phone || !instagram)) {
+      return NextResponse.json({ error: 'Missing required contact fields.' }, { status: 400 });
+    }
+    if (!finalPick) {
+      return NextResponse.json({ error: 'Missing required final pick.' }, { status: 400 });
+    }
 
-    // ── Phone must include country code ──
+    // ── Disposable Email Check ──
+    const emailDomain = email.split('@')[1];
+    if (!isTestBypass && DISPOSABLE_DOMAINS.includes(emailDomain)) {
+      return NextResponse.json(
+        { error: 'Please use a real, permanent email address. Disposable emails are not allowed.' },
+        { status: 400 }
+      );
+    }
+
+    // ── Phone validation ──
     if (!phone.startsWith('+')) {
       return NextResponse.json(
         { error: 'Phone number must include your country code (e.g. +91 for India).' },
         { status: 400 }
       );
     }
+    
+    // Extract just the digits after the plus sign
+    const justDigits = phone.substring(1);
+    
+    // In our frontend, we combined +XX with the input. We want the user input part to be 10 digits exactly.
+    // However, some country codes are 1, 2, or 3 digits. 
+    // To strictly enforce 10 digits for the local part, we could check user.phone from the frontend payload.
+    // The frontend sends user.phone as `+919876543210`.
+    // It's safer to rely on the frontend validation for the exact 10 digit requirement, 
+    // but we can add a basic length check. (Must be at least 11 total digits including country code).
+    if (justDigits.length < 11 || justDigits.length > 14) {
+       return NextResponse.json(
+        { error: 'Please enter a valid 10-digit phone number with your country code.' },
+        { status: 400 }
+      );
+    }
+
+    // ── Instagram strict regex ──
+    if (!/^[a-zA-Z0-9._]{1,30}$/.test(instagram)) {
+      return NextResponse.json(
+        { error: 'Please enter a valid Instagram handle (letters, numbers, periods, underscores).' },
+        { status: 400 }
+      );
+    }
 
     // ── Duplicate checks — run all in parallel for speed ──
-    const [emailCheck, phoneCheck, instaCheck, fingerprintCheck] = await Promise.all([
-      supabase.from('pitchside_entries').select('id').eq('email', email).maybeSingle(),
-      supabase.from('pitchside_entries').select('id').eq('phone', phone).maybeSingle(),
-      supabase.from('pitchside_entries').select('id').eq('instagram', instagram).maybeSingle(),
-      fingerprint
-        ? supabase.from('pitchside_entries').select('id').eq('fingerprint_hash', fingerprint).maybeSingle()
-        : Promise.resolve({ data: null }),
-    ]);
+    let emailCheck: any = { data: null };
+    let phoneCheck: any = { data: null };
+    let instaCheck: any = { data: null };
+    let nickCheck: any = { data: null };
+    let fingerprintCheck: any = { data: null };
+
+    if (!isTestBypass) {
+      const results = await Promise.all([
+        supabase.from('pitchside_entries').select('id').eq('email', email).maybeSingle(),
+        supabase.from('pitchside_entries').select('id').eq('phone', phone).maybeSingle(),
+        supabase.from('pitchside_entries').select('id').eq('instagram', instagram).maybeSingle(),
+        supabase.from('pitchside_entries').select('id').ilike('nick', nick).maybeSingle(),
+        fp
+          ? supabase.from('pitchside_entries').select('id').eq('fingerprint_hash', fp).maybeSingle()
+          : Promise.resolve({ data: null }),
+      ]);
+      [emailCheck, phoneCheck, instaCheck, nickCheck, fingerprintCheck] = results;
+    }
 
     if (emailCheck.data) {
       return NextResponse.json(
@@ -77,6 +145,12 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       );
     }
+    if (nickCheck.data) {
+      return NextResponse.json(
+        { error: 'This nickname is already taken. Please choose another one.' },
+        { status: 409 }
+      );
+    }
     if (fingerprintCheck.data) {
       return NextResponse.json(
         { error: 'An entry from this device has already been submitted. One entry per person.' },
@@ -93,20 +167,21 @@ export async function POST(req: NextRequest) {
     const { data, error } = await supabase
       .from('pitchside_entries')
       .insert({
-        name:            user.name,
-        nick:            user.nick,
+        name:            user.name || nick,
+        nick:            nick,
         instagram,
         email,
         phone,
         final_pick:      finalPick,
         group_picks:     groupPicks,
+        third_picks:     thirdPicks || {},
         r32_picks:       r32Picks,
         r16_picks:       r16Picks,
         qf_picks:        qfPicks,
         sf_picks:        sfPicks,
         entry_time:      entryTime || new Date().toISOString(),
         submitted_at:    new Date().toISOString(),
-        fingerprint_hash: fingerprint || null,
+        fingerprint_hash: fp || null,
         ip_address:      ip,
       })
       .select('id')
