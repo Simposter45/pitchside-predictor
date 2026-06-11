@@ -91,7 +91,7 @@ export default function ConfirmPage() {
         </ul>
       </div>
 
-      <div style={{ marginTop: 40, width: '100%', maxWidth: '800px', alignSelf: 'center' }}>
+      <div style={{ marginTop: 40, width: '100%', maxWidth: '1200px', alignSelf: 'center' }}>
         <Leaderboard />
       </div>
 
