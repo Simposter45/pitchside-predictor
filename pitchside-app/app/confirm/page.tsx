@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { usePredictionStore } from '@/lib/store';
-import { getFlag } from '@/lib/data';
+import { getFlag, getFlagEmoji } from '@/lib/data';
 import Leaderboard from '@/components/Leaderboard';
 
 export default function ConfirmPage() {
@@ -26,7 +26,7 @@ export default function ConfirmPage() {
     ' · ' +
     t.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 
-  const shareText = `I just predicted my full World Cup 2026 path on PitchSide Predictor! My champion: ${finalPick} ${getFlag(finalPick || '')} 🏆\n\nEnter now for a chance to win an iPhone 17 Pro 👉 @thepitchsidetv\n#WC2026 #PitchSideTV`;
+  const shareText = `🏆 I just predicted ${finalPick} ${getFlagEmoji(getFlag(finalPick || ''))} to win the 2026 World Cup!\n\nCan you beat my bracket? Join PitchSide Predictor and win an iPhone 17 Pro!\n👉 https://pitchsidepredictor.com\n\n📸 IG: @thepitchsidetv\n📺 YT: PitchSide TV`;
 
   const handleShare = async () => {
     if (navigator.share) {

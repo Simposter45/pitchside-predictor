@@ -24,6 +24,19 @@ export function getFlag(name: string): string {
   return 'un'; // United Nations / generic flag fallback for TBD
 }
 
+export function getFlagEmoji(countryCode: string): string {
+  if (!countryCode || countryCode === 'un') return '🏳️';
+  if (countryCode === 'gb-eng') return '🏴󠁧󠁢󠁥󠁮󠁧󠁿';
+  if (countryCode === 'gb-wls') return '🏴󠁧󠁢󠁷󠁬󠁳󠁿';
+  if (countryCode === 'gb-sct') return '🏴󠁧󠁢󠁳󠁣󠁴󠁿';
+  
+  const codePoints = countryCode
+    .toUpperCase()
+    .split('')
+    .map(char => 127397 + char.charCodeAt(0));
+  return String.fromCodePoint(...codePoints);
+}
+
 export function getGroupAdvancers(groupPicks: Record<string, string[]>) {
   return WC_GROUPS.map((g) => ({
     group: g.name,
