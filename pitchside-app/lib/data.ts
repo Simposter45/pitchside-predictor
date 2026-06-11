@@ -1,18 +1,18 @@
 import { Group, KnockoutMatchup } from '@/types';
 
 export const WC_GROUPS: Group[] = [
-  { name: 'A', teams: [{ f: 'mx', n: 'Mexico', r: 15 }, { f: 'za', n: 'South Africa', r: 60 }, { f: 'kr', n: 'South Korea', r: 23 }, { f: 'it', n: 'Italy', r: 9 }] },
-  { name: 'B', teams: [{ f: 'ca', n: 'Canada', r: 40 }, { f: 'ba', n: 'Bosnia-Herz.', r: 55 }, { f: 'ma', n: 'Morocco', r: 14 }, { f: 'ng', n: 'Nigeria', r: 28 }] },
-  { name: 'C', teams: [{ f: 'de', n: 'Germany', r: 12 }, { f: 'cw', n: 'Curacao', r: 83 }, { f: 'ci', n: "Cote d'Ivoire", r: 30 }, { f: 'ec', n: 'Ecuador', r: 35 }] },
-  { name: 'D', teams: [{ f: 'us', n: 'USA', r: 11 }, { f: 'py', n: 'Paraguay', r: 63 }, { f: 'au', n: 'Australia', r: 24 }, { f: 'se', n: 'Sweden', r: 26 }] },
-  { name: 'E', teams: [{ f: 'fr', n: 'France', r: 2 }, { f: 'sn', n: 'Senegal', r: 18 }, { f: 'no', n: 'Norway', r: 34 }, { f: 'jp', n: 'Japan', r: 17 }] },
-  { name: 'F', teams: [{ f: 'nl', n: 'Netherlands', r: 7 }, { f: 'tr', n: 'Turkey', r: 42 }, { f: 'tn', n: 'Tunisia', r: 32 }, { f: 'pe', n: 'Peru', r: 35 }] },
-  { name: 'G', teams: [{ f: 'be', n: 'Belgium', r: 3 }, { f: 'eg', n: 'Egypt', r: 36 }, { f: 'ir', n: 'Iran', r: 22 }, { f: 'nz', n: 'New Zealand', r: 85 }] },
-  { name: 'H', teams: [{ f: 'es', n: 'Spain', r: 6 }, { f: 'cv', n: 'Cape Verde', r: 71 }, { f: 'sa', n: 'Saudi Arabia', r: 56 }, { f: 'uy', n: 'Uruguay', r: 20 }] },
-  { name: 'I', teams: [{ f: 'gb-eng', n: 'England', r: 5 }, { f: 'hr', n: 'Croatia', r: 10 }, { f: 'gh', n: 'Ghana', r: 60 }, { f: 'pa', n: 'Panama', r: 72 }] },
-  { name: 'J', teams: [{ f: 'ar', n: 'Argentina', r: 1 }, { f: 'dz', n: 'Algeria', r: 41 }, { f: 'at', n: 'Austria', r: 25 }, { f: 'jo', n: 'Jordan', r: 88 }] },
-  { name: 'K', teams: [{ f: 'pt', n: 'Portugal', r: 8 }, { f: 'uz', n: 'Uzbekistan', r: 68 }, { f: 'co', n: 'Colombia', r: 27 }, { f: 'ch', n: 'Switzerland', r: 19 }] },
-  { name: 'L', teams: [{ f: 'br', n: 'Brazil', r: 4 }, { f: 'dk', n: 'Denmark', r: 21 }, { f: 'cl', n: 'Chile', r: 45 }, { f: 'ml', n: 'Mali', r: 49 }] },
+  { name: 'A', teams: [{ f: 'mx', n: 'Mexico', r: 15 }, { f: 'za', n: 'South Africa', r: 60 }, { f: 'kr', n: 'South Korea', r: 23 }, { f: 'cz', n: 'Czechia', r: 36 }] },
+  { name: 'B', teams: [{ f: 'ca', n: 'Canada', r: 40 }, { f: 'ba', n: 'Bosnia-Herz.', r: 55 }, { f: 'qa', n: 'Qatar', r: 34 }, { f: 'ch', n: 'Switzerland', r: 19 }] },
+  { name: 'C', teams: [{ f: 'br', n: 'Brazil', r: 5 }, { f: 'ma', n: 'Morocco', r: 13 }, { f: 'ht', n: 'Haiti', r: 89 }, { f: 'gb-sct', n: 'Scotland', r: 39 }] },
+  { name: 'D', teams: [{ f: 'us', n: 'USA', r: 11 }, { f: 'py', n: 'Paraguay', r: 56 }, { f: 'au', n: 'Australia', r: 24 }, { f: 'tr', n: 'Türkiye', r: 40 }] },
+  { name: 'E', teams: [{ f: 'de', n: 'Germany', r: 16 }, { f: 'cw', n: 'Curaçao', r: 90 }, { f: 'ci', n: 'Ivory Coast', r: 38 }, { f: 'ec', n: 'Ecuador', r: 31 }] },
+  { name: 'F', teams: [{ f: 'nl', n: 'Netherlands', r: 7 }, { f: 'jp', n: 'Japan', r: 18 }, { f: 'se', n: 'Sweden', r: 26 }, { f: 'tn', n: 'Tunisia', r: 41 }] },
+  { name: 'G', teams: [{ f: 'be', n: 'Belgium', r: 3 }, { f: 'eg', n: 'Egypt', r: 36 }, { f: 'ir', n: 'Iran', r: 20 }, { f: 'nz', n: 'New Zealand', r: 104 }] },
+  { name: 'H', teams: [{ f: 'es', n: 'Spain', r: 8 }, { f: 'cv', n: 'Cape Verde', r: 65 }, { f: 'sa', n: 'Saudi Arabia', r: 53 }, { f: 'uy', n: 'Uruguay', r: 15 }] },
+  { name: 'I', teams: [{ f: 'fr', n: 'France', r: 2 }, { f: 'sn', n: 'Senegal', r: 17 }, { f: 'iq', n: 'Iraq', r: 58 }, { f: 'no', n: 'Norway', r: 47 }] },
+  { name: 'J', teams: [{ f: 'ar', n: 'Argentina', r: 1 }, { f: 'dz', n: 'Algeria', r: 43 }, { f: 'at', n: 'Austria', r: 25 }, { f: 'jo', n: 'Jordan', r: 71 }] },
+  { name: 'K', teams: [{ f: 'pt', n: 'Portugal', r: 6 }, { f: 'cd', n: 'Congo', r: 60 }, { f: 'uz', n: 'Uzbekistan', r: 64 }, { f: 'co', n: 'Colombia', r: 14 }] },
+  { name: 'L', teams: [{ f: 'gb-eng', n: 'England', r: 4 }, { f: 'hr', n: 'Croatia', r: 10 }, { f: 'gh', n: 'Ghana', r: 68 }, { f: 'pa', n: 'Panama', r: 44 }] },
 ];
 
 export function getFlag(name: string): string {
