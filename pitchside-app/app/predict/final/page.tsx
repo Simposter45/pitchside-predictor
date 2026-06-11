@@ -57,7 +57,7 @@ export default function FinalPage() {
         qfPicks,
         sfPicks,
         finalPick,
-        entryTime: Date.now(),
+        entryTime: store.entryTime,
         fingerprint: visitorId,
       };
 

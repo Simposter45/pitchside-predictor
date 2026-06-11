@@ -179,7 +179,7 @@ export async function POST(req: NextRequest) {
         r16_picks:       r16Picks,
         qf_picks:        qfPicks,
         sf_picks:        sfPicks,
-        entry_time:      entryTime || new Date().toISOString(),
+        entry_time:      typeof entryTime === 'number' ? new Date(entryTime).toISOString() : (entryTime || new Date().toISOString()),
         submitted_at:    new Date().toISOString(),
         fingerprint_hash: fp || null,
         ip_address:      ip,
