@@ -35,6 +35,19 @@ export default function FinalPage() {
     }
     setLoading(true);
     try {
+      let visitorId = 'blocked_' + Math.random().toString(36).substring(7);
+      try {
+        const fpPromise = import('@fingerprintjs/fingerprintjs').then(fp => fp.load());
+        const fp: any = await Promise.race([
+          fpPromise,
+          new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3500))
+        ]);
+        const result = await fp.get();
+        visitorId = result.visitorId;
+      } catch (e) {
+        console.warn('Fingerprint blocked or timed out, using fallback ID');
+      }
+
       const payload = {
         user,
         groupPicks,
@@ -44,8 +57,8 @@ export default function FinalPage() {
         qfPicks,
         sfPicks,
         finalPick,
-        entryTime: store.entryTime,
-        fingerprint,
+        entryTime: Date.now(),
+        fingerprint: visitorId,
       };
 
       const res = await fetch('/api/submit', {
