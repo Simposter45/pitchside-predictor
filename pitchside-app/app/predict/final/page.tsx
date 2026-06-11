@@ -138,6 +138,7 @@ export default function FinalPage() {
           </div>
         )}
       </div>
+      </div>
 
       <div className="bottom-spacer" />
 
