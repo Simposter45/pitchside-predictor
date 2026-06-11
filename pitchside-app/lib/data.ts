@@ -51,22 +51,26 @@ export function buildR32Matchups(groupPicks: Record<string, string[]>, thirdPick
   const t = (i: number) => thirdPicks[i] || 'TBD';
 
   const matchups = [
-    { t1: w('A'), t2: t(0) },
-    { t1: w('B'), t2: t(1) },
-    { t1: w('C'), t2: t(2) },
-    { t1: w('D'), t2: t(3) },
-    { t1: w('E'), t2: t(4) },
-    { t1: w('F'), t2: t(5) },
-    { t1: w('G'), t2: t(6) },
-    { t1: w('H'), t2: t(7) },
-    { t1: w('I'), t2: r('A') },
-    { t1: w('J'), t2: r('B') },
-    { t1: w('K'), t2: r('C') },
-    { t1: w('L'), t2: r('D') },
-    { t1: r('E'), t2: r('I') },
-    { t1: r('F'), t2: r('J') },
-    { t1: r('G'), t2: r('K') },
-    { t1: r('H'), t2: r('L') },
+    // Top Half - QF1
+    { t1: r('A'), t2: r('B') }, // 73
+    { t1: w('E'), t2: t(0) },   // 75
+    { t1: w('C'), t2: r('F') }, // 74
+    { t1: r('E'), t2: r('I') }, // 77
+    // Top Half - QF2
+    { t1: w('H'), t2: r('J') }, // 83
+    { t1: r('K'), t2: r('L') }, // 84
+    { t1: w('G'), t2: t(1) },   // 81
+    { t1: w('D'), t2: t(2) },   // 82
+    // Bottom Half - QF3
+    { t1: w('F'), t2: r('C') }, // 76
+    { t1: w('I'), t2: t(3) },   // 78
+    { t1: w('A'), t2: t(4) },   // 79
+    { t1: w('L'), t2: t(5) },   // 80
+    // Bottom Half - QF4
+    { t1: r('D'), t2: r('G') }, // 86
+    { t1: w('K'), t2: t(6) },   // 88
+    { t1: w('B'), t2: t(7) },   // 85
+    { t1: w('J'), t2: r('H') }, // 87
   ];
 
   return matchups.map((m, i) => ({
