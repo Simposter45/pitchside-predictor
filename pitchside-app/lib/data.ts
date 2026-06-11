@@ -79,10 +79,17 @@ export function buildR32Matchups(groupPicks: Record<string, string[]>, thirdPick
     'Jun 29', 'Jun 30', 'Jun 30', 'Jul 1',
     'Jul 3', 'Jul 3', 'Jul 2', 'Jul 3',
   ];
+  
+  const r32Nums = [
+    73, 75, 74, 77,
+    83, 84, 81, 82,
+    76, 78, 79, 80,
+    86, 88, 85, 87,
+  ];
 
   return matchups.map((m, i) => ({
     id: `r32_${i}`,
-    label: r32Dates[i],
+    label: `Match ${r32Nums[i]} · ${r32Dates[i]}`,
     team1: m.t1,
     team2: m.t2,
     flag1: getFlag(m.t1),
@@ -95,7 +102,8 @@ export function buildNextRound(
   prevMatchups: KnockoutMatchup[],
   count: number,
   prefix: string,
-  dates: string[]
+  dates: string[],
+  matchNums: number[]
 ): KnockoutMatchup[] {
   const matchups: KnockoutMatchup[] = [];
   for (let i = 0; i < count / 2; i++) {
@@ -105,7 +113,7 @@ export function buildNextRound(
     const t2 = prevPicks[m2?.id] || 'TBD';
     matchups.push({ 
       id: `${prefix}_${i}`, 
-      label: dates[i] || `Match ${i + 1}`, 
+      label: `Match ${matchNums[i]} · ${dates[i] || ''}`, 
       team1: t1, 
       team2: t2, 
       flag1: getFlag(t1), 
@@ -123,12 +131,17 @@ export function buildAllKnockoutRounds(
   qfPicks: Record<string, string>
 ) {
   const r16Dates = ['Jul 4', 'Jul 4', 'Jul 5', 'Jul 5', 'Jul 6', 'Jul 6', 'Jul 7', 'Jul 7'];
+  const r16Nums = [89, 90, 93, 94, 91, 92, 95, 96];
+  
   const qfDates = ['Jul 9', 'Jul 10', 'Jul 11', 'Jul 11'];
+  const qfNums = [97, 98, 99, 100];
+  
   const sfDates = ['Jul 14', 'Jul 15'];
+  const sfNums = [101, 102];
 
   const r32 = buildR32Matchups(groupPicks, thirdPicks);
-  const r16 = buildNextRound(r32Picks, r32, 16, 'r16', r16Dates);
-  const qf = buildNextRound(r16Picks, r16, 8, 'qf', qfDates);
-  const sf = buildNextRound(qfPicks, qf, 4, 'sf', sfDates);
+  const r16 = buildNextRound(r32Picks, r32, 16, 'r16', r16Dates, r16Nums);
+  const qf = buildNextRound(r16Picks, r16, 8, 'qf', qfDates, qfNums);
+  const sf = buildNextRound(qfPicks, qf, 4, 'sf', sfDates, sfNums);
   return { r32, r16, qf, sf };
 }
