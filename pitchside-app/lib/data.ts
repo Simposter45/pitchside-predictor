@@ -73,9 +73,16 @@ export function buildR32Matchups(groupPicks: Record<string, string[]>, thirdPick
     { t1: w('J'), t2: r('H') }, // 87
   ];
 
+  const r32Dates = [
+    'Jun 28', 'Jun 30', 'Jun 29', 'Jul 2',
+    'Jul 1', 'Jul 2', 'Jul 1', 'Jul 2',
+    'Jun 29', 'Jun 30', 'Jun 30', 'Jul 1',
+    'Jul 3', 'Jul 3', 'Jul 2', 'Jul 3',
+  ];
+
   return matchups.map((m, i) => ({
     id: `r32_${i}`,
-    label: `Match ${i + 1}`,
+    label: r32Dates[i],
     team1: m.t1,
     team2: m.t2,
     flag1: getFlag(m.t1),
@@ -87,7 +94,8 @@ export function buildNextRound(
   prevPicks: Record<string, string>,
   prevMatchups: KnockoutMatchup[],
   count: number,
-  prefix: string
+  prefix: string,
+  dates: string[]
 ): KnockoutMatchup[] {
   const matchups: KnockoutMatchup[] = [];
   for (let i = 0; i < count / 2; i++) {
@@ -95,7 +103,14 @@ export function buildNextRound(
     const m2 = prevMatchups[i * 2 + 1];
     const t1 = prevPicks[m1?.id] || 'TBD';
     const t2 = prevPicks[m2?.id] || 'TBD';
-    matchups.push({ id: `${prefix}_${i}`, label: `Match ${i + 1}`, team1: t1, team2: t2, flag1: getFlag(t1), flag2: getFlag(t2) });
+    matchups.push({ 
+      id: `${prefix}_${i}`, 
+      label: dates[i] || `Match ${i + 1}`, 
+      team1: t1, 
+      team2: t2, 
+      flag1: getFlag(t1), 
+      flag2: getFlag(t2) 
+    });
   }
   return matchups;
 }
@@ -107,9 +122,13 @@ export function buildAllKnockoutRounds(
   r16Picks: Record<string, string>,
   qfPicks: Record<string, string>
 ) {
+  const r16Dates = ['Jul 4', 'Jul 4', 'Jul 5', 'Jul 5', 'Jul 6', 'Jul 6', 'Jul 7', 'Jul 7'];
+  const qfDates = ['Jul 9', 'Jul 10', 'Jul 11', 'Jul 11'];
+  const sfDates = ['Jul 14', 'Jul 15'];
+
   const r32 = buildR32Matchups(groupPicks, thirdPicks);
-  const r16 = buildNextRound(r32Picks, r32, 16, 'r16');
-  const qf = buildNextRound(r16Picks, r16, 8, 'qf');
-  const sf = buildNextRound(qfPicks, qf, 4, 'sf');
+  const r16 = buildNextRound(r32Picks, r32, 16, 'r16', r16Dates);
+  const qf = buildNextRound(r16Picks, r16, 8, 'qf', qfDates);
+  const sf = buildNextRound(qfPicks, qf, 4, 'sf', sfDates);
   return { r32, r16, qf, sf };
 }
