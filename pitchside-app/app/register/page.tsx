@@ -78,6 +78,38 @@ export default function RegisterPage() {
     if (!validate()) return;
     setLoading(true);
     try {
+      let visitorId = 'blocked_' + Math.random().toString(36).substring(7);
+      try {
+        const fpPromise = import('@fingerprintjs/fingerprintjs').then(fp => fp.load());
+        const fp: any = await Promise.race([
+          fpPromise,
+          new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3500))
+        ]);
+        const result = await fp.get();
+        visitorId = result.visitorId;
+      } catch (e) {
+        console.warn('Fingerprint blocked or timed out');
+      }
+
+      const res = await fetch('/api/check-duplicate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: form.email.trim(),
+          phone: `${form.countryCode}${form.phone.trim()}`,
+          instagram: form.insta.trim(),
+          nick: form.nick.trim(),
+          fingerprint: visitorId
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || 'Validation failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+
       setUser({
         name: form.name.trim(),
         nick: form.nick.trim(),
@@ -88,7 +120,8 @@ export default function RegisterPage() {
         phone: `${form.countryCode}${form.phone.trim()}`,
       });
       router.push('/predict/groups');
-    } finally {
+    } catch (err) {
+      alert('Network error. Please check your connection and try again.');
       setLoading(false);
     }
   };
