@@ -98,6 +98,11 @@ export default function FinalPage() {
           PICK YOUR<br />CHAMPION
         </h2>
 
+        <div className="final-container">
+        <h2 className="font-bebas" style={{ fontSize: 32, letterSpacing: 1, margin: 0 }}>The Final (Jul 19)</h2>
+        <div style={{ color: 'var(--gold)', fontSize: 13, fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 24, marginTop: 4 }}>
+          MetLife Stadium, New York
+        </div>
         <div className="final-matchup">
           {!finalistsReady ? (
             <div style={{ color: 'var(--gray)', fontSize: 14, padding: 20 }}>

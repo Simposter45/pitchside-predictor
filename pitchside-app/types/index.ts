@@ -24,6 +24,7 @@ export interface KnockoutMatchup {
   team2: string;
   flag1: string;
   flag2: string;
+  date?: string;
 }
 
 export interface PredictionState {

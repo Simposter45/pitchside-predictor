@@ -62,10 +62,10 @@ export default function KnockoutsPage() {
   const { r32, r16, qf, sf } = buildAllKnockoutRounds(groupPicks, thirdPicks, r32Picks, r16Picks, qfPicks);
 
   const rounds: RoundSection[] = [
-    { label: 'Round of 32', matchups: r32, key: 'r32Picks' },
-    { label: 'Round of 16', matchups: r16, key: 'r16Picks' },
-    { label: 'Quarter-Finals', matchups: qf, key: 'qfPicks' },
-    { label: 'Semi-Finals', matchups: sf, key: 'sfPicks' },
+    { label: 'Round of 32 (Jun 28 - Jul 3)', matchups: r32, key: 'r32Picks' },
+    { label: 'Round of 16 (Jul 4 - Jul 7)', matchups: r16, key: 'r16Picks' },
+    { label: 'Quarter-Finals (Jul 9 - Jul 11)', matchups: qf, key: 'qfPicks' },
+    { label: 'Semi-Finals (Jul 14 - Jul 15)', matchups: sf, key: 'sfPicks' },
   ];
 
   const totalPicks =
