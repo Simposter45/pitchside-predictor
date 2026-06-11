@@ -125,7 +125,7 @@ export default function Leaderboard() {
 
       <style jsx>{`
         .leaderboard-container {
-          max-width: 800px;
+          max-width: 1200px;
           margin: 0 auto 60px;
           padding: 0 24px;
         }
