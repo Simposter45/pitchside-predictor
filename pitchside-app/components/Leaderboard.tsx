@@ -60,10 +60,11 @@ export default function Leaderboard() {
           <thead>
             <tr>
               <th style={{ width: '60px', textAlign: 'center' }}>Rank</th>
-              <th style={{ width: '40%' }}>Nickname</th>
-              <th style={{ width: '25%' }}>Champion</th>
-              <th style={{ width: '25%' }}>Runner Up</th>
-              <th style={{ width: '100px', textAlign: 'right' }}>Points Gained</th>
+              <th style={{ width: '25%', minWidth: '120px' }}>Nickname</th>
+              <th style={{ width: '20%', minWidth: '100px' }}>Champion</th>
+              <th style={{ width: '20%', minWidth: '100px' }}>Runner Up</th>
+              <th style={{ width: '20%', minWidth: '120px' }}>Time of Entry</th>
+              <th style={{ width: '100px', textAlign: 'right' }}>Points</th>
             </tr>
           </thead>
           <tbody>
@@ -110,6 +111,9 @@ export default function Leaderboard() {
                     )}
                   </div>
                 </td>
+                <td style={{ color: 'var(--gray)', fontSize: '12px' }}>
+                  {new Date(entry.submittedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                </td>
                 <td style={{ textAlign: 'right', fontWeight: 'bold', color: entry.score > 0 ? 'var(--green)' : 'var(--gray)' }}>
                   {entry.score}
                 </td>
@@ -129,7 +133,8 @@ export default function Leaderboard() {
           background: var(--navy2);
           border: 1px solid var(--gray-border);
           border-radius: 12px;
-          overflow: hidden;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
         }
         .leaderboard-table {
           width: 100%;
