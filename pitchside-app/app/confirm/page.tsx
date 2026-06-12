@@ -40,6 +40,7 @@ export default function ConfirmPage() {
 
   return (
     <div className="confirm-wrap">
+      <div style={{ maxWidth: 480, margin: '0 auto' }}>
       <div className="confirm-icon">🎉</div>
       <h1 className="confirm-title">YOU&apos;RE IN!</h1>
       <p className="confirm-sub">
@@ -90,8 +91,9 @@ export default function ConfirmPage() {
           <li>Winner announced when PitchSide TV hits 100K followers</li>
         </ul>
       </div>
+      </div>
 
-      <div style={{ marginTop: 40, width: '100%', maxWidth: '1200px', alignSelf: 'center' }}>
+      <div style={{ marginTop: 40, width: '100%', maxWidth: '1200px', alignSelf: 'center', margin: '40px auto 0' }}>
         <Leaderboard />
       </div>
 
