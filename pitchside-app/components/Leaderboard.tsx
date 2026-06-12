@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getFlag } from '@/lib/data';
+import PredictionModal from './PredictionModal';
 
 interface LeaderboardEntry {
   id: string;
@@ -16,6 +17,7 @@ interface LeaderboardEntry {
 export default function Leaderboard() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchEntries = () => {
@@ -69,7 +71,11 @@ export default function Leaderboard() {
           </thead>
           <tbody>
             {entries.map((entry) => (
-              <tr key={entry.id} className={isPitchSide(entry.nick) ? 'highlight-pitchside' : ''}>
+              <tr 
+                key={entry.id} 
+                className={`leaderboard-row ${isPitchSide(entry.nick) ? 'highlight-pitchside' : ''}`}
+                onClick={() => setSelectedEntryId(entry.id)}
+              >
                 <td style={{ textAlign: 'center', fontWeight: 'bold', color: 'var(--gray)' }}>
                   {entry.rank}
                 </td>
@@ -123,6 +129,13 @@ export default function Leaderboard() {
         </table>
       </div>
 
+      {selectedEntryId && (
+        <PredictionModal 
+          entryId={selectedEntryId} 
+          onClose={() => setSelectedEntryId(null)} 
+        />
+      )}
+
       <style jsx>{`
         .leaderboard-container {
           max-width: 1200px;
@@ -157,6 +170,13 @@ export default function Leaderboard() {
         }
         .leaderboard-table tr:last-child td {
           border-bottom: none;
+        }
+        .leaderboard-row {
+          cursor: pointer;
+          transition: background 0.2s ease;
+        }
+        .leaderboard-row:hover {
+          background: rgba(255, 255, 255, 0.05);
         }
         .highlight-pitchside td {
           background: rgba(245, 158, 11, 0.08);
