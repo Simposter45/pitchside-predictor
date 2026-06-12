@@ -3,14 +3,17 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import html2canvas from 'html2canvas';
 import { usePredictionStore } from '@/lib/store';
 import { getFlag, getFlagEmoji } from '@/lib/data';
 import Leaderboard from '@/components/Leaderboard';
+import ShareCard from '@/components/ShareCard';
 
 export default function ConfirmPage() {
   const router = useRouter();
   const { user, finalPick, entryTime, submitted } = usePredictionStore();
   const [copied, setCopied] = useState(false);
+  const [sharing, setSharing] = useState(false);
 
   useEffect(() => {
     if (!submitted || !user) {
@@ -29,12 +32,52 @@ export default function ConfirmPage() {
   const shareText = `🏆 I just predicted ${finalPick} ${getFlagEmoji(getFlag(finalPick || ''))} to win the 2026 World Cup!\n\nCan you beat my bracket? Join PitchSide Predictor and win an iPhone 17 Pro!\n👉 https://pitchsidepredictor.com\n\n📸 IG: @thepitchsidetv\n📺 YT: PitchSide TV`;
 
   const handleShare = async () => {
-    if (navigator.share) {
-      await navigator.share({ text: shareText });
-    } else {
-      await navigator.clipboard.writeText(shareText);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
+    try {
+      setSharing(true);
+      const shareElement = document.getElementById('share-card');
+      if (!shareElement) {
+        setSharing(false);
+        return;
+      }
+
+      const canvas = await html2canvas(shareElement, {
+        useCORS: true,
+        scale: 2,
+        backgroundColor: '#0f172a',
+      });
+
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          setSharing(false);
+          return;
+        }
+        
+        const file = new File([blob], 'pitchside-prediction.png', { type: 'image/png' });
+        const shareData = {
+          files: [file],
+          text: shareText
+        };
+
+        if (navigator.canShare && navigator.canShare(shareData)) {
+          await navigator.share(shareData);
+        } else {
+          // Fallback: download image and copy text
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'pitchside-prediction.png';
+          a.click();
+          URL.revokeObjectURL(url);
+
+          await navigator.clipboard.writeText(shareText);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2500);
+        }
+        setSharing(false);
+      }, 'image/png');
+    } catch (err) {
+      console.error('Error sharing image:', err);
+      setSharing(false);
     }
   };
 
@@ -48,34 +91,13 @@ export default function ConfirmPage() {
         correct path wins the iPhone 17 Pro when PitchSide TV hits 100K.
       </p>
 
-      <div className="entry-card" id="entry-summary">
-        <div className="entry-row">
-          <span className="entry-key">Predictor</span>
-          <span className="entry-val">{user.nick}</span>
-        </div>
-        <div className="entry-row">
-          <span className="entry-key">Instagram</span>
-          <span className="entry-val">{user.insta}</span>
-        </div>
-        <div className="entry-row">
-          <span className="entry-key">Champion Pick</span>
-          <span className="entry-val gold">
-            {finalPick} {getFlag(finalPick || '')}
-          </span>
-        </div>
-        <div className="entry-row">
-          <span className="entry-key">Entry Locked</span>
-          <span className="entry-val">{fmt}</span>
-        </div>
-        <div className="entry-row">
-          <span className="entry-key">Status</span>
-          <span className="entry-val green">✓ Confirmed</span>
-        </div>
+      <div style={{ margin: '32px 0' }}>
+        <ShareCard />
       </div>
 
       <div className="share-btns">
-        <button className="share-btn primary" onClick={handleShare} id="share-btn">
-          {copied ? '✓ Copied!' : '📤 Share Your Pick'}
+        <button className="share-btn primary" onClick={handleShare} disabled={sharing} id="share-btn">
+          {sharing ? '⏳ Generating Image...' : copied ? '✓ Downloaded & Copied!' : '📤 Share Your Pick'}
         </button>
         <Link href="/" className="share-btn">
           Back to Home
